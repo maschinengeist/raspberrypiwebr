@@ -1,0 +1,8 @@
+STATION=Live Irland
+STREAM=http://66.90.73.250:8080/
+STATION=Digitally Imported
+STREAM=http://scfire-dtc-aa01.stream.aol.com:80/stream/1009
+STATION=HR-1
+STREAM=mms://gffstream-wm-w54a.wm.llnwd.net/gffstream_wm_w54a
+STATION=Antenne Bayern
+STREAM=mms://gffstream-wm-w54a.wm.llnwd.net/gffstream_wm_w54a

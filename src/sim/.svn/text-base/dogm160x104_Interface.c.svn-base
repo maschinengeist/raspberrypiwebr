@@ -1,0 +1,244 @@
+/*! \file dogm160x104_Interface.c
+*/
+
+#ifdef __cplusplus
+	extern "C" {
+#endif
+
+/*************************************************************************
+*   I N C L U D E
+*************************************************************************/
+
+#ifdef __cplusplus
+    #include <cstdlib>
+#else
+    #include <stdlib.h>
+#endif
+
+#include <SDL.h>
+#include <windows.h>
+
+#include "mytypes.h"
+#include "dogm160x104.h"
+
+/*************************************************************************
+*   D E F I N E
+*************************************************************************/
+
+
+/*************************************************************************
+*   G L O B A L
+*************************************************************************/
+
+static INT_U8 u08CD_State = 0;
+static INT_U8 u08Address = 0;
+static INT_U8 u08Page = 0;
+
+SDL_Surface* pixel_on;
+SDL_Surface* pixel_off;
+
+SDL_Surface* screen;
+
+/*************************************************************************
+*   F O R W A R D   D E C L A R A T I O N
+*************************************************************************/
+
+/************************************************************************
+*/
+/*! \fn void Dogm160x104_InterfaceInit(void)
+*
+*   \brief init function for init the gpios and the dogm spi
+*
+*************************************************************************/
+void Dogm160x104_InterfaceInit(void)
+{
+   // initialize SDL video
+   if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+   {
+     printf( "Unable to init SDL: %s\n", SDL_GetError() );
+   }
+
+   // make sure SDL cleans up before exit
+   atexit(SDL_Quit);
+
+   // create a new window
+    screen = SDL_SetVideoMode(320, 208, 16,
+                                        SDL_HWSURFACE|SDL_DOUBLEBUF);
+   if ( !screen )
+   {
+     printf("Unable to set 640x480 video: %s\n", SDL_GetError());
+   }
+
+   // load an image
+   pixel_on = SDL_LoadBMP("pixel_on.bmp");
+   pixel_off = SDL_LoadBMP("pixel_off.bmp");
+
+   if (!pixel_off)
+   {
+     printf("Unable to load bitmap: %s\n", SDL_GetError());
+   }
+}
+
+/************************************************************************
+*/
+/*! \fn void Dogm160x104_CS(INT_U8 u08State)
+*
+*   \brief set or reset the dogm CS pin
+*
+*   \param u08State = 0 --> CS pin set to low
+*   \param u08State = 1 --> CS pin set to high
+*
+*************************************************************************/
+void Dogm160x104_CS(INT_U8 u08State)
+{
+
+}
+
+/************************************************************************
+*/
+/*! \fn void Dogm160x104_Reset(INT_U8 u08State)
+*
+*   \brief set or reset the dogm reset pin
+*
+*   \param u08State = 0 --> reset pin set to low
+*   \param u08State = 1 --> reset pin set to high
+*
+*************************************************************************/
+void Dogm160x104_Reset(INT_U8 u08State)
+{
+
+}
+
+/************************************************************************
+*/
+/*! \fn void Dogm160x104_Sleep(INT_U16 u16Sleep)
+*
+*   \brief sleep funktion in millisecondes
+*
+*   \param u16Sleep --> Sleep time in millisecondes
+*
+*************************************************************************/
+void Dogm160x104_Sleep(INT_U16 u16Sleep)
+{
+   Sleep(u16Sleep);
+}
+
+/************************************************************************
+*/
+/*! \fn void Dogm160x104_CD(INT_U8 u08State)
+*
+*   \brief set or reset the A0 pin
+*
+*   \param u08State = 0 --> A0 pin set to low
+*   \param u08State = 1 --> A0 pin set to high
+*
+*************************************************************************/
+void Dogm160x104_CD(INT_U8 u08State)
+{
+	u08CD_State = u08State;
+}
+
+
+/************************************************************************
+*/
+/*! \fn void Dogm160x104_WriteBlock(INT_U8* p08Data, INT_U16 u16Size)
+*
+*   \brief send a size of data over the dogm spi
+*
+*   \param p08Data --> Pointer to data
+*   \param u16Size --> Size of data to send
+*
+*************************************************************************/
+void Dogm160x104_WriteBlock(INT_U8* p08Data, INT_U16 u16Size)
+{
+
+	if(u08CD_State == 0)
+	{
+      /* set address */
+      if((p08Data[0] & 0xf0) == 0x10)
+      {
+         u08Address = (p08Data[0] << 4) + (p08Data[1] & 0x0f);
+      }
+
+      /* set page */
+      if((p08Data[0] & 0xf0) == 0x60)
+      {
+         u08Page = (p08Data[0] & 0x1f);
+      }
+	}
+	else
+	{
+      INT_U32 u32Loop, u32SizeCount;
+      SDL_Rect dstrect;
+
+      for(u32SizeCount = 0 ; u32SizeCount < u16Size ; u32SizeCount ++)
+      {
+         INT_U8 u08Data = p08Data[u32SizeCount];
+         INT_U16 u16Address = u08Address;
+
+			dstrect.x = (u16Address << 1);
+			dstrect.y = (u08Page << 3);
+
+         for(u32Loop = 0 ; u32Loop < 8 ; u32Loop += 2)
+         {
+            // centre the bitmap on screen
+
+            if(u08Data & 0x03)
+            {
+               // draw bitmap
+               SDL_BlitSurface(pixel_on, 0, screen, &dstrect);
+            }
+            else
+            {
+               // draw bitmap
+               SDL_BlitSurface(pixel_off, 0, screen, &dstrect);
+            }
+
+            dstrect.y += 2;
+
+            u08Data >>= 2;
+         }
+
+			u08Address++;
+			if(u08Address > 159)
+			{
+				u08Address = 0;
+				u08Page++;
+				if(u08Page > 25) u08Page = 0;
+			}
+      }
+
+		// finally, update the screen :)
+		SDL_Flip(screen);
+	}
+}
+
+
+/************************************************************************
+*/
+/*! \fn void Dogm160x104_Write(INT_U8 u08Data)
+*
+*   \brief send a size of data over the dogm spi
+*
+*   \param p08Data --> Pointer to data
+*   \param u16Size --> Size of data to send
+*
+*************************************************************************/
+void Dogm160x104_Write(INT_U8 u08Data)
+{
+	if(u08CD_State == 0)
+	{
+
+
+	}
+	else
+	{
+
+
+	}
+}
+
+#ifdef __cplusplus
+   }
+#endif
+

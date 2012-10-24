@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Simulant" />
+	<File name="Dogm160x104/dogm160x104.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="1445" topLine="42" />
+	</File>
+	<File name="GU140x32/GU140x32.h" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="353" topLine="6" />
+	</File>
+	<File name="HD44780/HD44780.c" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="5453" topLine="180" />
+	</File>
+	<File name="HD44780/HD44780.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="634" topLine="4" />
+	</File>
+	<File name="gpio/gpio.c" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="6212" topLine="217" />
+	</File>
+	<File name="gpio/gpio.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="356" topLine="16" />
+	</File>
+	<File name="i2c/i2c.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="328" topLine="0" />
+	</File>
+	<File name="i2c/i2c.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="617" topLine="0" />
+	</File>
+	<File name="inc/GU140x32_Interface.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="241" topLine="0" />
+	</File>
+	<File name="inc/Init.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="275" topLine="0" />
+	</File>
+	<File name="inc/Menue.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="394" topLine="41" />
+	</File>
+	<File name="inc/Station.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="327" topLine="9" />
+	</File>
+	<File name="inc/message.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="390" topLine="5" />
+	</File>
+	<File name="incprj/SVT_CommandConfig.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="835" topLine="10" />
+	</File>
+	<File name="incprj/mytypes.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="377" topLine="0" />
+	</File>
+	<File name="incprj/project.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="294" topLine="0" />
+	</File>
+	<File name="main.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="1418" topLine="55" />
+	</File>
+	<File name="spi/spi.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="298" topLine="91" />
+	</File>
+	<File name="spi/spi.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="48" topLine="0" />
+	</File>
+	<File name="src/Directory.c" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="4108" topLine="150" />
+	</File>
+	<File name="src/HD44780_UserInterface.c" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="1147" topLine="34" />
+	</File>
+	<File name="src/Init.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="1031" topLine="30" />
+	</File>
+	<File name="src/Menue.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="8918" topLine="386" />
+	</File>
+	<File name="src/Mplayer.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="8309" topLine="349" />
+	</File>
+	<File name="src/Network.c" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="6045" topLine="198" />
+	</File>
+	<File name="src/Settings.c" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="2043" topLine="45" />
+	</File>
+	<File name="src/Station.c" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="4338" topLine="180" />
+	</File>
+	<File name="src/debug.c" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="1621" topLine="0" />
+	</File>
+	<File name="src/message.c" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="1296" topLine="41" />
+	</File>
+</CodeBlocks_layout_file>
