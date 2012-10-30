@@ -1,40 +1,18 @@
-#include <linux/types.h>
-
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
 
 #include "mytypes.h"
 #include "debug.h"
 
-#include "Station.h"
-#include "Directory.h"
 #include "message.h"
 #include "Init.h"
 #include "Mplayer.h"
 #include "Network.h"
 #include "Menue.h"
 
-#include "gpio.h"
 
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <poll.h>
-
- /****************************************************************
- * Constants
- ****************************************************************/
-
-#define SYSFS_GPIO_DIR "/sys/class/gpio"
-#define POLL_TIMEOUT (3 * 1000) /* 3 seconds */
-#define MAX_BUF 64
 
 
 /*************************************************************************
@@ -45,6 +23,8 @@
 *   G L O B A L
 *************************************************************************/
 
+
+/* static global settings of the webradio */
 static WEBRADIO WebRadio;
 
 

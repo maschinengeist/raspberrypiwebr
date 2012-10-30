@@ -234,7 +234,7 @@ int Mplayer_GetStreamInfo(char* cStreamInfo, int iMaxSize)
 	char cText[256];
 	int iPosition;
 
-	pResult = fgets(cText, 256, fpMplayer);
+	pResult = fgets(cText, sizeof(cText), fpMplayer);
 	if(pResult == 0) return -1;
 
 	/* if mplayer startet ? */

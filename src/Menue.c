@@ -39,7 +39,7 @@
 
 #define SETTINGS_PATH "/WebRadio/Settings"
 
-#define STATION_FILE "/WebRadio/Station"
+#define STATION_PATH"/WebRadio/Station"
 
 /*************************************************************************
 *   G L O B A L
@@ -69,14 +69,6 @@ void Menue_Start(WEBRADIO *pWebRadio)
 		printf("Can't start network\r\n");
 	}
 
-	/* read channel entrys */
-	iResult = Station_Open("Stations.txt");
-	if(iResult < 0)
-	{
-		printf("Can't find Station.txt\r\n");
-		exit(0);
-	}
-
 	iResult = Settings_Read(SETTINGS_PATH, pWebRadio);
 	if(iResult < 0)
 	{
@@ -84,7 +76,7 @@ void Menue_Start(WEBRADIO *pWebRadio)
 		exit(0);
 	}
 
-	iStation = Directory_Open(STATION_FILE);
+	iStation = Directory_Open(STATION_PATH);
 	if(iStation > 0)
 	{
 		/* set max station */
@@ -276,12 +268,12 @@ void Menue_Play(WEBRADIO *pWebRadio)
 
 	if(Message_Read() == MESSAGE_KEY_RIGHT)
 	{
-		if(pWebRadio->u08Volume < 99) pWebRadio->u08Volume++;
+		if(pWebRadio->u08Volume < 29) pWebRadio->u08Volume++;
 		/* display volume */
 		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
 
-		Mplayer_Volume(pWebRadio->u08Volume);
+		Mplayer_Volume((pWebRadio->u08Volume * 3));
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
@@ -291,7 +283,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
 
-		Mplayer_Volume(pWebRadio->u08Volume);
+		Mplayer_Volume((pWebRadio->u08Volume * 3));
 	}
 
 	if(Message_Read() == MESSAGE_KEY_MIDDLE)
@@ -496,6 +488,26 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 		/* Enter_play mode */
 		pWebRadio->u08MenueState = MENUE_STATION;
 		pWebRadio->u08MenueInit = 1;
+	}
+
+	if(Message_Read() == MESSAGE_KEY_RIGHT)
+	{
+		if(pWebRadio->u08Volume < 29) pWebRadio->u08Volume++;
+		/* display volume */
+		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
+		HD44780_PrintStringXY(cText, 3, 0);
+
+		Mplayer_Volume((pWebRadio->u08Volume * 3));
+	}
+
+	if(Message_Read() == MESSAGE_KEY_LEFT)
+	{
+		if(pWebRadio->u08Volume > 0) pWebRadio->u08Volume--;
+		/* display volume */
+		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
+		HD44780_PrintStringXY(cText, 3, 0);
+
+		Mplayer_Volume((pWebRadio->u08Volume * 3));
 	}
 
 	/* was there some actions */
