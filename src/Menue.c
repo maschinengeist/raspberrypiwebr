@@ -35,11 +35,11 @@
 *   D E F I N E
 *************************************************************************/
 
-#define NETWORK_PATH "/WebRadio/Network.conf"
+#define NETWORK_PATH "Network.conf"
 
-#define SETTINGS_PATH "/WebRadio/Settings"
+#define SETTINGS_PATH "Settings"
 
-#define STATION_PATH"/WebRadio/Station"
+#define STATION_PATH "/Station"
 
 /*************************************************************************
 *   G L O B A L
@@ -54,6 +54,8 @@ void Menue_Start(WEBRADIO *pWebRadio)
 {
 	int iResult, iTimeout = 10, iStation;
 	INT_U8 u08Sequenz;
+	char* cText;
+	char cFullPath[256];
 
 	pWebRadio->u08Channel = 2;
 	pWebRadio->u08Volume = 10;
@@ -63,10 +65,12 @@ void Menue_Start(WEBRADIO *pWebRadio)
 	/* init message */
 	Message_Init(0, 1, 2);
 
-	iResult = Network_Up("test");
+	/* read channel entrys */
+	iResult = Network_ReadSettings(NETWORK_PATH, &pWebRadio->NetworkSettings);
+
 	if(iResult < 0)
 	{
-		printf("Can't start network\r\n");
+		printf("Can't find Network.conf\r\n");
 	}
 
 	iResult = Settings_Read(SETTINGS_PATH, pWebRadio);
@@ -76,7 +80,17 @@ void Menue_Start(WEBRADIO *pWebRadio)
 		exit(0);
 	}
 
-	iStation = Directory_Open(STATION_PATH);
+	/* get full path */
+	if(0 == realpath(".", pWebRadio->cFullPath))
+	{
+		printf("Can't find the current path\r\n");
+		exit(0);
+	}
+
+	/* add station to path */
+	sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, STATION_PATH);
+
+	iStation = Directory_Open(cFullPath);
 	if(iStation > 0)
 	{
 		/* set max station */
@@ -95,19 +109,9 @@ void Menue_Start(WEBRADIO *pWebRadio)
 		exit(0);
 	}
 
-	/* read channel entrys */
-	iResult = Network_ReadSettings(NETWORK_PATH, &pWebRadio->NetworkSettings);
-
-	if(iResult < 0)
-	{
-		printf("Can't find Network.conf\r\n");
-	}
-
-
 	HD44780_Clear();
 	HD44780_Backlight(1);
    HD44780_PrintStringXY("   start webradio", 1, 0);
-
 
     u08Sequenz = 0;
 
@@ -385,7 +389,7 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 
 					cEscapeStation[iLoop] = 0;
 
-					sprintf(cText,"loadlist /WebRadio/Station/%s.m3u\n", cEscapeStation);
+					sprintf(cText,"loadlist %s/Station/%s.m3u\n",pWebRadio->cFullPath, cEscapeStation);
 
 					Mplayer_PlayFile(cText);
 				}

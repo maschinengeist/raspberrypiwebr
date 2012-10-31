@@ -143,21 +143,18 @@ void HD44780_Print(void)
 *************************************************************************/
 RESULT HD44780_Init(INT_U8 u08Mode)
 {
-   RESULT Result = SB_OK;
+	RESULT Result = SB_OK;
 
-    u08PosX = u08PosY = 0;
-    memset(Terminal, 0x20, sizeof(Terminal));
+	u08PosX = u08PosY = 0;
+	memset(Terminal, 0x20, sizeof(Terminal));
 
-    printf(CL_WHITE);
-    printf(CURSOFF);
-    printf(CLEARSCR);
-    printf(BC_BLACK);
+	printf(CLEARSCR);
 
-   printf(GOTOYX,0 ,0);
+	printf(GOTOYX,0 ,0);
 
-   HD44780_Print();
+	HD44780_Print();
 
-   return Result;
+	return Result;
 }
 
 
@@ -309,13 +306,12 @@ void HD44780_Backlight(INT_U8 u08On)
 	/* check mode */
 	if(u08On == HD44780_BACKLIGHT_ON)
 	{
-		printf(CL_WHITE);
-		printf(BC_BLACK);
+		//printf(BC_BLACK);
+		//printf(CL_WHITE);
 	}
 	else
 	{
-		printf(BC_BLACK);
-		printf(CL_DARKGRAY);
+
 	}
 }
 

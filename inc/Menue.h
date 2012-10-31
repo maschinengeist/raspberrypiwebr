@@ -47,6 +47,8 @@ typedef struct _WEBRADIO
    CHAR cStreamInfo[128];
    /* station name */
    CHAR cStation[128];
+   /* full path of programm dir */
+   CHAR cFullPath[256];
    /* Menue Backlight Timer */
    INT_U16  u16BacklightTimeout;
    /* Menue Timer */

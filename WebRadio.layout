@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="Debug" />
+	<ActiveTarget name="Simulant" />
 	<File name="Dogm160x104/dogm160x104.h" open="0" top="0" tabpos="5">
 		<Cursor position="1445" topLine="42" />
 	</File>
 	<File name="GU140x32/GU140x32.h" open="0" top="0" tabpos="11">
 		<Cursor position="353" topLine="6" />
+	</File>
+	<File name="HD44780 Terminal/HD44780.c" open="0" top="0" tabpos="0">
+		<Cursor position="8580" topLine="290" />
 	</File>
 	<File name="HD44780/HD44780.c" open="0" top="0" tabpos="11">
 		<Cursor position="5453" topLine="180" />
@@ -13,13 +16,13 @@
 	<File name="HD44780/HD44780.h" open="0" top="0" tabpos="7">
 		<Cursor position="634" topLine="4" />
 	</File>
-	<File name="gpio/gpio.c" open="1" top="0" tabpos="7">
+	<File name="gpio/gpio.c" open="0" top="0" tabpos="7">
 		<Cursor position="2825" topLine="72" />
 	</File>
 	<File name="gpio/gpio.h" open="0" top="0" tabpos="5">
 		<Cursor position="356" topLine="16" />
 	</File>
-	<File name="i2c/i2c.c" open="1" top="0" tabpos="3">
+	<File name="i2c/i2c.c" open="1" top="0" tabpos="2">
 		<Cursor position="328" topLine="0" />
 	</File>
 	<File name="i2c/i2c.h" open="0" top="0" tabpos="6">
@@ -32,7 +35,7 @@
 		<Cursor position="275" topLine="0" />
 	</File>
 	<File name="inc/Menue.h" open="1" top="0" tabpos="6">
-		<Cursor position="1025" topLine="9" />
+		<Cursor position="1203" topLine="39" />
 	</File>
 	<File name="inc/Station.h" open="0" top="0" tabpos="8">
 		<Cursor position="327" topLine="9" />
@@ -49,14 +52,14 @@
 	<File name="incprj/project.h" open="0" top="0" tabpos="10">
 		<Cursor position="294" topLine="0" />
 	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="5">
-		<Cursor position="161" topLine="32" />
+	<File name="main.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="740" topLine="20" />
 	</File>
 	<File name="spi/spi.h" open="0" top="0" tabpos="6">
 		<Cursor position="48" topLine="0" />
 	</File>
-	<File name="src/Directory.c" open="0" top="0" tabpos="12">
-		<Cursor position="4108" topLine="150" />
+	<File name="src/Directory.c" open="1" top="0" tabpos="4">
+		<Cursor position="3478" topLine="117" />
 	</File>
 	<File name="src/HD44780_UserInterface.c" open="0" top="0" tabpos="10">
 		<Cursor position="1147" topLine="34" />
@@ -64,17 +67,17 @@
 	<File name="src/Init.c" open="0" top="0" tabpos="2">
 		<Cursor position="1031" topLine="30" />
 	</File>
-	<File name="src/Menue.c" open="1" top="0" tabpos="1">
-		<Cursor position="10475" topLine="144" />
+	<File name="src/Menue.c" open="1" top="1" tabpos="1">
+		<Cursor position="8378" topLine="357" />
 	</File>
-	<File name="src/Mplayer.c" open="1" top="1" tabpos="2">
-		<Cursor position="7504" topLine="298" />
+	<File name="src/Mplayer.c" open="1" top="0" tabpos="5">
+		<Cursor position="8443" topLine="340" />
 	</File>
 	<File name="src/Network.c" open="0" top="0" tabpos="6">
-		<Cursor position="6045" topLine="198" />
+		<Cursor position="6060" topLine="198" />
 	</File>
 	<File name="src/Settings.c" open="0" top="0" tabpos="9">
-		<Cursor position="2043" topLine="45" />
+		<Cursor position="2058" topLine="54" />
 	</File>
 	<File name="src/Station.c" open="0" top="0" tabpos="10">
 		<Cursor position="4338" topLine="180" />
@@ -82,7 +85,7 @@
 	<File name="src/debug.c" open="0" top="0" tabpos="11">
 		<Cursor position="1621" topLine="0" />
 	</File>
-	<File name="src/message.c" open="1" top="0" tabpos="4">
-		<Cursor position="1296" topLine="41" />
+	<File name="src/message.c" open="0" top="0" tabpos="4">
+		<Cursor position="1296" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>
