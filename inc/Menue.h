@@ -61,12 +61,12 @@ typedef struct _WEBRADIO
    INT_U8   u08MenueInit;
    /* Network settings */
    INT_U8   u08Network;
-   /* Current Channel */
-   INT_U8   u08Channel;
-   /* Stor here the current Channel */
-   INT_U8   u08OldChannel;
-   /* New Station is select */
-   INT_U8   u08NewStation;
+   /* Current Station */
+   INT_U8   u08Station;
+   /* Stor here the current Station */
+   INT_U8   u08OldStation;
+   /* if 1 the station will be change */
+   INT_U8   u08InitStation;
    /* information of current selectet station position */
    INT_U8   u08MenueStationPosition;
    /* Maximum available Channels */

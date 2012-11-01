@@ -37,7 +37,7 @@
 
 #define NETWORK_PATH "Network.conf"
 
-#define SETTINGS_PATH "Settings"
+#define SETTINGS_PATH "/Settings"
 
 #define STATION_PATH "/Station"
 
@@ -54,13 +54,11 @@ void Menue_Start(WEBRADIO *pWebRadio)
 {
 	int iResult, iTimeout = 10, iStation;
 	INT_U8 u08Sequenz;
-	char* cText;
 	char cFullPath[256];
 
-	pWebRadio->u08Channel = 2;
 	pWebRadio->u08Volume = 10;
 	pWebRadio->u08MenueStationPosition = 1;
-	pWebRadio->u08NewStation = 1;
+	pWebRadio->u08InitStation = 1;
 
 	/* init message */
 	Message_Init(0, 1, 2);
@@ -73,19 +71,23 @@ void Menue_Start(WEBRADIO *pWebRadio)
 		printf("Can't find Network.conf\r\n");
 	}
 
-	iResult = Settings_Read(SETTINGS_PATH, pWebRadio);
-	if(iResult < 0)
-	{
-		printf("Can't find Settings.txt\r\n");
-		exit(0);
-	}
-
 	/* get full path */
 	if(0 == realpath(".", pWebRadio->cFullPath))
 	{
 		printf("Can't find the current path\r\n");
 		exit(0);
 	}
+
+	/* add settings to path */
+	sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, SETTINGS_PATH);
+
+	iResult = Settings_Read(cFullPath, pWebRadio);
+	if(iResult < 0)
+	{
+		printf("Can't find Settings.txt\r\n");
+		exit(0);
+	}
+
 
 	/* add station to path */
 	sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, STATION_PATH);
@@ -272,7 +274,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 
 	if(Message_Read() == MESSAGE_KEY_RIGHT)
 	{
-		if(pWebRadio->u08Volume < 29) pWebRadio->u08Volume++;
+		if(pWebRadio->u08Volume < 30) pWebRadio->u08Volume++;
 		/* display volume */
 		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
@@ -343,7 +345,7 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 		/* Clear Screen  and switch backlight on */
 		HD44780_Clear();
 		HD44780_Backlight(1);
-		HD44780_PrintStringXY("  connect station", 1, 0);
+		HD44780_PrintStringXY("   connect station", 1, 0);
 
 		u08Sequenz = 0;
 
@@ -351,13 +353,13 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 		pWebRadio->u08MenueInit = 0;
 		pWebRadio->u16Timeout = 50;
 
-		if(pWebRadio->u08NewStation)
+		if(pWebRadio->u08InitStation)
 		{
-			pWebRadio->u08NewStation = 0;
+			pWebRadio->u08InitStation = 0;
 
 			memcpy(pWebRadio->cStation, "no stream info", sizeof("no stream info"));
 
-			if(Directory_ReadEntrie(pWebRadio->u08Channel, &DirEntries) == 1)
+			if(Directory_ReadEntrie(pWebRadio->u08Station, &DirEntries) == 1)
 			{
 				if(DirEntries.iType == DIR_TYPE_MCU)
 				{
@@ -497,9 +499,6 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 	if(Message_Read() == MESSAGE_KEY_RIGHT)
 	{
 		if(pWebRadio->u08Volume < 29) pWebRadio->u08Volume++;
-		/* display volume */
-		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
-		HD44780_PrintStringXY(cText, 3, 0);
 
 		Mplayer_Volume((pWebRadio->u08Volume * 3));
 	}
@@ -507,9 +506,6 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
 		if(pWebRadio->u08Volume > 0) pWebRadio->u08Volume--;
-		/* display volume */
-		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
-		HD44780_PrintStringXY(cText, 3, 0);
 
 		Mplayer_Volume((pWebRadio->u08Volume * 3));
 	}
@@ -529,7 +525,7 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 *************************************************************************/
 void Menue_Station(WEBRADIO *pWebRadio)
 {
-	static INT_U8 u08Position = 0, u08OldChannel = 1;
+	static INT_U8 u08Position = 0, u08OldStation = 1;
 
 	/* init new menue screen */
 	if(pWebRadio->u08MenueInit)
@@ -542,7 +538,7 @@ void Menue_Station(WEBRADIO *pWebRadio)
 		Message_Set(MESSAGE_REFRESH_SCREEN);
 
 		/* save old channel */
-		pWebRadio->u08OldChannel = pWebRadio->u08Channel;
+		pWebRadio->u08OldStation = pWebRadio->u08Station;
 
 		/* set timeout of start value */
 		pWebRadio->u08MenueInit = 0;
@@ -557,8 +553,10 @@ void Menue_Station(WEBRADIO *pWebRadio)
 		}
 		else
 		{
-			if((u08OldChannel + u08Position) < pWebRadio->u08MaxChannel) u08OldChannel++;
+			if((u08OldStation + u08Position) < pWebRadio->u08MaxChannel) u08OldStation++;
 		}
+
+		printf("Position: %d\n          ", u08OldStation + u08Position);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
@@ -569,8 +567,10 @@ void Menue_Station(WEBRADIO *pWebRadio)
 		}
 		else
 		{
-			if(u08OldChannel > 1) u08OldChannel--;
+			if(u08OldStation > 1) u08OldStation--;
 		}
+
+		printf("Position: %d\n          ", u08OldStation + u08Position);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_MIDDLE)
@@ -580,14 +580,16 @@ void Menue_Station(WEBRADIO *pWebRadio)
       pWebRadio->u08MenueInit = 1;
 
 		/* get current channel */
-		if(!(pWebRadio->u08Channel == u08OldChannel + u08Position))
+		if(!(pWebRadio->u08Station == u08OldStation + u08Position))
 		{
-		    pWebRadio->u08Channel = u08OldChannel + u08Position;
-          pWebRadio->u08NewStation = 1;
+          pWebRadio->u08InitStation = 1;
 		}
+
+		pWebRadio->u08Station = u08OldStation + u08Position;
+		printf("new Position: %d\n          ", pWebRadio->u08Station);
 	}
 
-    if(pWebRadio->u16Timeout == 0)
+   if(pWebRadio->u16Timeout == 0)
 	{
 		/* Enter_play mode */
 		pWebRadio->u08MenueState = MENUE_PLAY;
@@ -609,7 +611,7 @@ void Menue_Station(WEBRADIO *pWebRadio)
 			else  HD44780_PrintStringXY(" ", u08Loop, 0);
 
 
-			if(Directory_ReadEntrie(u08OldChannel + u08Loop, &DirEntries) == 1)
+			if(Directory_ReadEntrie(u08OldStation + u08Loop, &DirEntries) == 1)
 			{
 				memcpy(&pWebRadio->cStation, DirEntries.cName, 19);
 				pWebRadio->cStation[19] = 0;
@@ -956,6 +958,8 @@ void Menue_Quit(WEBRADIO *pWebRadio)
 	int iResult, iTimeout = 10;
 	INT_U8 u08Sequenz;
 
+	char cFullPath[256];
+
 	/* init new menue screen */
 	if(pWebRadio->u08MenueInit)
 	{
@@ -1024,8 +1028,10 @@ void Menue_Quit(WEBRADIO *pWebRadio)
 		/* backlight off and clear screen */
 		HD44780_Clear();
 		HD44780_Backlight(0);
-		HD44780_PrintStringXY("   start webradio   ", 1, 0);
 		HD44780_PrintStringXY("     i'am sleep     ", 1, 0);
+
+		/* add settings to path */
+		sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, SETTINGS_PATH);
 
 		/* save the Webradio settings */
 		iResult = Settings_Write(SETTINGS_PATH, pWebRadio);

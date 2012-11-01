@@ -70,11 +70,15 @@ int Settings_Read(char* cPath, WEBRADIO *pWebRadio)
 
 		pWebRadio->u08Volume = (INT_U8)iValue;
 
+		iSize = fscanf(fpSettings, "station=%d\n", &iValue);
+		if(iSize == 0) return -1;
+
+		pWebRadio->u08Station = (INT_U8)iValue;
+
 		fclose(fpSettings);
 
 		return 1;
 	}
-
 
 	return -1;
 }

@@ -115,7 +115,7 @@ int Directory_Open(char *cDir)
 					else
 					{
 
-						for(u08FilterLoop = 0 ; u08FilterLoop < (sizeof(FilterList) / 8); u08FilterLoop++)
+						for(u08FilterLoop = 0 ; u08FilterLoop < 2; u08FilterLoop++)
 						{
 							/* her a error to fix */
 							if(strstr(namelist[iLoop]->d_name, FilterList[u08FilterLoop].cFilter) > 0)
