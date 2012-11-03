@@ -219,7 +219,7 @@ void *MessageThread(void *arg)
 
 		pthread_mutex_unlock(&MessageMutex);
 
-		usleep(10000);
+		usleep(5000);
 	}
 	while(1);
 }

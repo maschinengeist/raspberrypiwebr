@@ -353,52 +353,49 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 		pWebRadio->u08MenueInit = 0;
 		pWebRadio->u16Timeout = 50;
 
-		if(pWebRadio->u08InitStation)
+		if(Directory_ReadEntrie(pWebRadio->u08Station, &DirEntries) == 1)
 		{
-			pWebRadio->u08InitStation = 0;
-
-			memcpy(pWebRadio->cStation, "no stream info", sizeof("no stream info"));
-
-			if(Directory_ReadEntrie(pWebRadio->u08Station, &DirEntries) == 1)
+			/* load current stations name */
+			if(DirEntries.iType == DIR_TYPE_MCU)
 			{
-				if(DirEntries.iType == DIR_TYPE_MCU)
+				int iLoop = 0;
+				char cEscapeStation[256];
+				char* pText = pWebRadio->cStation;
+
+				/* copy station name */
+				strcpy(pWebRadio->cStation, DirEntries.cName);
+
+				memset(cEscapeStation, 0x00 , sizeof(cEscapeStation));
+
+				/* escape spaces in name */
+				while(*pText)
 				{
-					int iLoop = 0;
-					char cEscapeStation[256];
-					char* pText = pWebRadio->cStation;
-
-					/* copy station name */
-					strcpy(pWebRadio->cStation, DirEntries.cName);
-
-					memset(cEscapeStation, 0x00 , sizeof(cEscapeStation));
-
-					/* escape spaces in name */
-					while(*pText)
+					/* escape spaces in string */
+					if(*pText == ' ')
 					{
-						/* escape spaces in string */
-						if(*pText == ' ')
-						{
-							cEscapeStation[iLoop++] = 92;
-							cEscapeStation[iLoop++] = 32;
-						}
-						else
-						{
-							cEscapeStation[iLoop++] = *pText;
-						}
-
-						pText++;
+						cEscapeStation[iLoop++] = 92;
+						cEscapeStation[iLoop++] = 32;
+					}
+					else
+					{
+						cEscapeStation[iLoop++] = *pText;
 					}
 
-					cEscapeStation[iLoop] = 0;
+					pText++;
+				}
 
+				cEscapeStation[iLoop] = 0;
+
+				if(pWebRadio->u08InitStation)
+				{
+					pWebRadio->u08InitStation = 0;
+
+					/* play station with mplayer */
 					sprintf(cText,"loadlist %s/Station/%s.m3u\n",pWebRadio->cFullPath, cEscapeStation);
-
 					Mplayer_PlayFile(cText);
 				}
 			}
-		}
-		else
-		{
+
 			/* Enter_play mode */
 			pWebRadio->u08MenueState = MENUE_PLAY;
 			pWebRadio->u08MenueInit = 1;
@@ -545,7 +542,7 @@ void Menue_Station(WEBRADIO *pWebRadio)
 		pWebRadio->u16Timeout = 800;
 	}
 
-	if(Message_Read() == MESSAGE_KEY_RIGHT)
+	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
 		if((u08Position < 3) && (u08Position < pWebRadio->u08MaxChannel))
 		{
@@ -555,11 +552,9 @@ void Menue_Station(WEBRADIO *pWebRadio)
 		{
 			if((u08OldStation + u08Position) < pWebRadio->u08MaxChannel) u08OldStation++;
 		}
-
-		printf("Position: %d\n          ", u08OldStation + u08Position);
 	}
 
-	if(Message_Read() == MESSAGE_KEY_LEFT)
+	if(Message_Read() == MESSAGE_KEY_RIGHT)
 	{
 		if(u08Position > 0)
 		{
@@ -569,8 +564,6 @@ void Menue_Station(WEBRADIO *pWebRadio)
 		{
 			if(u08OldStation > 1) u08OldStation--;
 		}
-
-		printf("Position: %d\n          ", u08OldStation + u08Position);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_MIDDLE)
@@ -586,13 +579,14 @@ void Menue_Station(WEBRADIO *pWebRadio)
 		}
 
 		pWebRadio->u08Station = u08OldStation + u08Position;
-		printf("new Position: %d\n          ", pWebRadio->u08Station);
 	}
 
    if(pWebRadio->u16Timeout == 0)
 	{
+		/* no changel get old channel */
+		pWebRadio->u08Station = pWebRadio->u08OldStation;
 		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_PLAY;
+		pWebRadio->u08MenueState = MENUE_CHANGE_STATION;
 		pWebRadio->u08MenueInit = 1;
 	}
 

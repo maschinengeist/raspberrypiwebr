@@ -25,8 +25,6 @@
 *************************************************************************/
 
 static INT_U8 u08PortValue = 0;
-static INT_U8 u08Mode = 0;
-static INT_U8 u08RsState = 0;
 
 /*************************************************************************
 *   F U N C T I O N
@@ -49,9 +47,6 @@ RESULT HD44780_UserInterface_InitGPIOs(void)
 
 	/* set port to zero */
 	iResult = i2c_Write("/dev/i2c-0", 0x20, &u08PortValue, 1);
-
-	/* read data from port */
-	////iResult = i2c_Read("/dev/i2c-0", 0x20, &u08Buffer[1], 1);
 
    return iResult;
 }
