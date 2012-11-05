@@ -28,14 +28,13 @@
 static WEBRADIO WebRadio;
 
 
-
 /****************************************************************
  * Main
  ****************************************************************/
 
 int main(void)
 {
-	printf("Start\r\n");
+	printf("start webradio\r\n");
 
 	Init();
 

@@ -327,25 +327,6 @@ int Mplayer_PlayCommand(int iCommand)
 
 /************************************************************************
 */
-/*! \fn int Mplayer_Volume(INT_U8 u08Volume)
-*
-*   \brief set the absolut volume
-*
-*   \param u08Volume --> Volume from 0 to 100
-*
-*   \return int --> -1 command not availabel, 1 execute command
-*
-*************************************************************************/
-int Mplayer_Volume(INT_U8 u08Volume)
-{
-    char cText[64];
-
-    sprintf(cText, "volume %d 1\n", (int)u08Volume);
-
-	return Mplayer_WriteFifo(cText);
-}
-/************************************************************************
-*/
 /*! \fn int Mplayer_PlayFile(char* cFile)
 
 *   \brief play an file or url

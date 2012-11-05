@@ -27,6 +27,7 @@
 #include "Mplayer.h"
 #include "Settings.h"
 #include "Directory.h"
+#include "amixer.h"
 
 #include "HD44780.h"
 
@@ -81,6 +82,7 @@ void Menue_Start(WEBRADIO *pWebRadio)
 	/* add settings to path */
 	sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, SETTINGS_PATH);
 
+	/* read setting of the webradio */
 	iResult = Settings_Read(cFullPath, pWebRadio);
 	if(iResult < 0)
 	{
@@ -88,6 +90,13 @@ void Menue_Start(WEBRADIO *pWebRadio)
 		exit(0);
 	}
 
+	/* set volume */
+	iResult = amixer_Volume(0, pWebRadio->u08Volume);
+	if(iResult < 0)
+	{
+		printf("Can't set volume\r\n");
+		exit(0);
+	}
 
 	/* add station to path */
 	sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, STATION_PATH);
@@ -279,7 +288,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
 
-		Mplayer_Volume((pWebRadio->u08Volume * 3));
+		amixer_Volume(0, (pWebRadio->u08Volume * 3));
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
@@ -289,7 +298,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
 
-		Mplayer_Volume((pWebRadio->u08Volume * 3));
+		amixer_Volume(0, (pWebRadio->u08Volume * 3));
 	}
 
 	if(Message_Read() == MESSAGE_KEY_MIDDLE)
@@ -497,14 +506,14 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 	{
 		if(pWebRadio->u08Volume < 29) pWebRadio->u08Volume++;
 
-		Mplayer_Volume((pWebRadio->u08Volume * 3));
+		amixer_Volume(0, (pWebRadio->u08Volume * 3));
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
 		if(pWebRadio->u08Volume > 0) pWebRadio->u08Volume--;
 
-		Mplayer_Volume((pWebRadio->u08Volume * 3));
+		amixer_Volume(0, (pWebRadio->u08Volume * 3));
 	}
 
 	/* was there some actions */
