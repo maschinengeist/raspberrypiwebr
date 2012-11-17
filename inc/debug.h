@@ -105,13 +105,13 @@
 	/* if you use your own funktion for example "MyPrintf" you must
 		declare it hier like the example below. */
 
-	extern void SVT_DebugCall(CHAR *string);
+	extern void DebugPrintf(CHAR *string);
 
 	/* Function for assertions, for example: MyPrintf(string)*/
-	#define DebugAssString(string)     SVT_DebugCall(string)
+	#define DebugAssString(string)     DebugPrintf(string)
 
 	/* Function for terminal message, for example: MyPrintf(string)*/
-	#define Debug(string)                  SVT_DebugCall(string)
+	#define Debug(string)                  DebugPrintf(string)
 
 	/* extern funktion for DB_PRINTF, is implemented in debug.c */
 	extern void DbgPrintf(char *format, ...);

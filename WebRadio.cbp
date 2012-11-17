@@ -98,11 +98,11 @@
 		<Unit filename="inc/Init.h" />
 		<Unit filename="inc/Menue.h" />
 		<Unit filename="inc/Station.h" />
+		<Unit filename="inc/debug.h" />
 		<Unit filename="inc/message.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="incprj/SVT_CommandConfig.h" />
 		<Unit filename="incprj/mytypes.h">
 			<Option target="Debug" />
 			<Option target="Release" />

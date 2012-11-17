@@ -258,7 +258,7 @@ int Network_Down(void)
 	FILE *fp;
 
 	/* create fifo in temp */
-	//fp = popen("ifdown wlan0 ", "r+");
+	fp = popen("ifdown wlan0 ", "r+");
 
 	/* pipe successfully opened? */
 	if(fp != NULL)

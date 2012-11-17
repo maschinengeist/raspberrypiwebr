@@ -68,10 +68,12 @@ void Menue_Start(WEBRADIO *pWebRadio)
 	HD44780_Backlight(1);
    HD44780_PrintStringXY("   start webradio", 1, 0);
 
+#if 0
 	if(-1 == Network_Up())
 	{
 		printf("Can't start network\r\n");
 	}
+#endif
 
 #ifdef SIMULANT
 	/* get full path */
@@ -224,7 +226,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 
 				*(pStringPosition[iLoop] -1) = 0;
 
-				if(pStringPosition[1 + iLoop] == 1)
+				if(pStringPosition[1 + iLoop] == (char*)1)
 				{
 					break;
 				}
@@ -261,7 +263,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 
 			for(iLoop = iLoopNext ; iLoop < 8 ; iLoop++)
 			{
-				if(pStringPosition[iLoop] > 1)
+				if(pStringPosition[iLoop] > (char*)1)
 				{
 					if((strlen(&cDisplay[1][0]) + strlen(pStringPosition[iLoop])) < 20 )
 					{
@@ -1120,14 +1122,15 @@ void Menue_Quit(WEBRADIO *pWebRadio)
 
 		sleep(1);
 
+#if 0
 		/* Network off */
 		iResult = Network_Down();
 		if(iResult < 0)
 		{
 			printf("Can't stop network\r\n");
 		}
+#endif
 
-		printf("end\r\n");
 	}
 
 	if(Message_Read() == MESSAGE_KEY_MIDDLE)
