@@ -278,6 +278,26 @@ void Mplayer_ReadStreamInfo(STREAM_ENTRY* pStreamEntry)
 
 /************************************************************************
 */
+/*! \fn int Mplayer_Volume(INT_U8 u08Volume)
+*
+*   \brief set the absolut volume
+*
+*   \param u08Volume --> Volume from 0 to 100
+*
+*   \return int --> -1 command not availabel, 1 execute command
+*
+*************************************************************************/
+int Mplayer_Volume(INT_U8 u08Volume)
+{
+   char cText[64];
+
+   sprintf(cText, "volume %d 1\n", (int)u08Volume);
+
+	return Mplayer_WriteFifo(cText);
+}
+
+/************************************************************************
+*/
 /*! \fn int Mplayer_PlayCommand(int iCommand)
 
 *   \brief send play command like volume play paus to the mplayer
@@ -351,14 +371,17 @@ int Mplayer_PlayFile(char* cFile)
 *************************************************************************/
 int Mplayer_Close(void)
 {
+	int iResult;
+	char cText[32];
+
+	sprintf(cText, "quit 1\n");
+	iResult = Mplayer_WriteFifo(cText);
+
    /* close pipe */
    fclose(fpMplayer);
-   return 1;
+
+   return iResult;
 }
-
-
-
-
 
 #ifdef __cplusplus
    }

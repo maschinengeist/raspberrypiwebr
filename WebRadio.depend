@@ -986,7 +986,7 @@
 
 1351625315 /home/sven/Arbeitsfläche/WebRadio/i2c/i2c.h
 
-1351802884 source:/home/sven/Arbeitsfläche/WebRadio/main.cpp
+1353100138 source:/home/sven/Arbeitsfläche/WebRadio/main.cpp
 	<unistd.h>
 	<stdio.h>
 	<string.h>
@@ -1002,9 +1002,9 @@
 
 1351625315 /home/sven/Arbeitsfläche/WebRadio/inc/Init.h
 
-1351625315 /home/sven/Arbeitsfläche/WebRadio/inc/Mplayer.h
+1353094737 /home/sven/Arbeitsfläche/WebRadio/inc/Mplayer.h
 
-1351625315 /home/sven/Arbeitsfläche/WebRadio/inc/Network.h
+1353098113 /home/sven/Arbeitsfläche/WebRadio/inc/Network.h
 
 1351802466 /home/sven/Arbeitsfläche/WebRadio/inc/Menue.h
 
@@ -1040,7 +1040,7 @@
 	"gpio.h"
 	"i2c.h"
 
-1351803642 source:/home/sven/Arbeitsfläche/WebRadio/src/Menue.c
+1353102113 source:/home/sven/Arbeitsfläche/WebRadio/src/Menue.c
 	<linux/types.h>
 	<fcntl.h>
 	<stdio.h>
@@ -1056,13 +1056,14 @@
 	"Mplayer.h"
 	"Settings.h"
 	"Directory.h"
+	"amixer.h"
 	"HD44780.h"
 
 1351625315 /home/sven/Arbeitsfläche/WebRadio/inc/Station.h
 
 1351625315 /home/sven/Arbeitsfläche/WebRadio/inc/Settings.h
 
-1351627590 source:/home/sven/Arbeitsfläche/WebRadio/src/Mplayer.c
+1353100608 source:/home/sven/Arbeitsfläche/WebRadio/src/Mplayer.c
 	<fcntl.h>
 	<stdio.h>
 	<string.h>
@@ -1071,7 +1072,7 @@
 	"mytypes.h"
 	"Mplayer.h"
 
-1351625315 source:/home/sven/Arbeitsfläche/WebRadio/src/Network.c
+1353098096 source:/home/sven/Arbeitsfläche/WebRadio/src/Network.c
 	<fcntl.h>
 	<stdio.h>
 	<string.h>
@@ -1080,7 +1081,7 @@
 	"mytypes.h"
 	"Network.h"
 
-1351804106 source:/home/sven/Arbeitsfläche/WebRadio/src/Settings.c
+1353100096 source:/home/sven/Arbeitsfläche/WebRadio/src/Settings.c
 	<fcntl.h>
 	<stdio.h>
 	<string.h>
@@ -1105,7 +1106,7 @@
 	<stdarg.h>
 	"debug.h"
 
-1351625315 source:/home/sven/Arbeitsfläche/WebRadio/src/message.c
+1351979590 source:/home/sven/Arbeitsfläche/WebRadio/src/message.c
 	<unistd.h>
 	<termios.h>
 	<stdio.h>
@@ -1123,4 +1124,15 @@
 	"HD44780.h"
 
 1351625315 /home/sven/Arbeitsfläche/WebRadio/HD44780 Terminal/HD44780.h
+
+1352146034 /home/sven/Arbeitsfläche/WebRadio/inc/amixer.h
+
+1352146651 source:/home/sven/Arbeitsfläche/WebRadio/src/amixer.c
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"amixer.h"
 

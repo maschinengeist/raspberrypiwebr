@@ -111,7 +111,13 @@ int Settings_Write(char* cPath, WEBRADIO *pWebRadio)
 
 		fprintf(fpSettings, "volume=%d\n", (int)pWebRadio->u08Volume);
 
+		fprintf(fpSettings, "station=%d\n", (int)pWebRadio->u08Station);
+
 		fclose(fpSettings);
+	}
+	else
+	{
+		return -1;
 	}
 
 	return 1;

@@ -36,7 +36,7 @@ int Network_ReadSettings(char* cPath, NETWORK_SETTINGS *pSettings);
 
 int Network_WriteSettings(char* cPath, NETWORK_SETTINGS *pSettings);
 
-int Network_Up(char* cPath);
+int Network_Up(void);
 
 int Network_Down(void);
 

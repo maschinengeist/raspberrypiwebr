@@ -55,6 +55,8 @@ int Mplayer_Start(void);
 
 int Mplayer_PlayFile(char* cFile);
 
+int Mplayer_Volume(INT_U8 u08Volume);
+
 int Mplayer_PlayCommand(int iCommand);
 
 int Mplayer_GetStreamInfo(char* cStreamInfo, int iMaxSize);

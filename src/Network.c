@@ -206,9 +206,41 @@ int Network_WriteSettings(char* cPath, NETWORK_SETTINGS *pSettings)
 *   \return int --> -1 no error, 1 write settings
 *
 *************************************************************************/
-int Network_Up(char* cPath)
+int Network_Up(void)
 {
-	return -1;
+	FILE *fp;
+
+	fp = popen("ifconfig up\r\n", "r+");
+
+	/* pipe successfully opened? */
+	if(fp != NULL)
+	{
+		fclose(fp);
+	}
+	else
+	{
+		printf("ifup wlan0 error\r\n");
+		return -1;
+	}
+
+	sleep(1);
+
+	/* create fifo in temp */
+	printf("iwconfig wlan0 essid \"HerrRossi\"\r\n");
+	fp = popen("iwconfig wlan0 essid \"HerrRossi\"\r\n", "r+");
+
+	/* pipe successfully opened? */
+	if(fp != NULL)
+	{
+		fclose(fp);
+	}
+	else
+	{
+		printf("ifup wlan0 error\r\n");
+		return -1;
+	}
+
+	return 1;
 }
 
 
@@ -223,9 +255,23 @@ int Network_Up(char* cPath)
 *************************************************************************/
 int Network_Down(void)
 {
+	FILE *fp;
 
+	/* create fifo in temp */
+	//fp = popen("ifdown wlan0 ", "r+");
 
-	return -1;
+	/* pipe successfully opened? */
+	if(fp != NULL)
+	{
+		fclose(fp);
+	}
+	else
+	{
+		printf("ifup wlan0 error\r\n");
+		return -1;
+	}
+
+	return 1;
 }
 
 

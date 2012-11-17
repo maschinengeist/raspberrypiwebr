@@ -64,37 +64,34 @@ void Menue_Start(WEBRADIO *pWebRadio)
 	/* init message */
 	Message_Init(0, 1, 2);
 
-	/* read channel entrys */
-	iResult = Network_ReadSettings(NETWORK_PATH, &pWebRadio->NetworkSettings);
+	HD44780_Clear();
+	HD44780_Backlight(1);
+   HD44780_PrintStringXY("   start webradio", 1, 0);
 
-	if(iResult < 0)
+	if(-1 == Network_Up())
 	{
-		printf("Can't find Network.conf\r\n");
+		printf("Can't start network\r\n");
 	}
 
+#ifdef SIMULANT
 	/* get full path */
 	if(0 == realpath(".", pWebRadio->cFullPath))
 	{
 		printf("Can't find the current path\r\n");
 		exit(0);
 	}
-
 	/* add settings to path */
 	sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, SETTINGS_PATH);
+#else
+	sprintf(pWebRadio->cFullPath, "/WebRadio");
+#endif
 
+	sprintf(cFullPath, "/WebRadio%s", SETTINGS_PATH);
 	/* read setting of the webradio */
 	iResult = Settings_Read(cFullPath, pWebRadio);
 	if(iResult < 0)
 	{
-		printf("Can't find Settings.txt\r\n");
-		exit(0);
-	}
-
-	/* set volume */
-	iResult = amixer_Volume(0, pWebRadio->u08Volume);
-	if(iResult < 0)
-	{
-		printf("Can't set volume\r\n");
+		printf("Can't find Settings\r\n");
 		exit(0);
 	}
 
@@ -110,6 +107,14 @@ void Menue_Start(WEBRADIO *pWebRadio)
 		/* start mplayer in slave mode */
 		Mplayer_Start();
 
+		/* set volume */
+		iResult = Mplayer_Volume(pWebRadio->u08Volume * 3);
+		if(iResult < 0)
+		{
+			printf("Can't set volume\r\n");
+			exit(0);
+		}
+
 		/* Enter_play mode */
 		pWebRadio->u08MenueState = MENUE_CHANGE_STATION;
 		pWebRadio->u08MenueInit = 1;
@@ -119,10 +124,6 @@ void Menue_Start(WEBRADIO *pWebRadio)
 		printf("Can't find Station.txt\r\n");
 		exit(0);
 	}
-
-	HD44780_Clear();
-	HD44780_Backlight(1);
-   HD44780_PrintStringXY("   start webradio", 1, 0);
 
     u08Sequenz = 0;
 
@@ -205,17 +206,87 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		pWebRadio->u16BacklightTimeout = 2000;
 		pWebRadio->u16Timeout = 0;
 
+
 		iLength = strlen(pWebRadio->cStation);
 		if(iLength > 20)
 		{
-			memset(cText, 0x00, sizeof(cText));
-			memcpy(cText, pWebRadio->cStation, 19);
-			HD44780_PrintStringXY(cText, 0, 0);
-			HD44780_PrintStringXY("-", 0, 19);
-			memset(cText, 0x00, sizeof(cText));
-			memcpy(cText, &pWebRadio->cStation[19], 20);
+			char* pStringPosition[8];
+			int iLoop, iLoopNext;
+			char cDisplay[2][32];
 
-			HD44780_PrintStringXY(cText, 1, 0);
+			memset(pStringPosition, 0x00, sizeof(pStringPosition));
+
+			pStringPosition[0] = &pWebRadio->cStation[0];
+
+			for(iLoop = 0 ; iLoop < 7 ; iLoop++)
+			{
+				pStringPosition[1 + iLoop] = strstr(pStringPosition[iLoop], " ") + 1;
+
+				*(pStringPosition[iLoop] -1) = 0;
+
+				if(pStringPosition[1 + iLoop] == 1)
+				{
+					break;
+				}
+			}
+
+			memset(&cDisplay[0][0], 0x00, sizeof(cDisplay));
+
+			iLoopNext = 8;
+			for(iLoop = 0 ; iLoop < 8 ; iLoop++)
+			{
+				if(pStringPosition[iLoop])
+				{
+					if((strlen(&cDisplay[0][0]) + strlen(pStringPosition[iLoop])) < 20 )
+					{
+						if(pStringPosition[iLoop])
+						{
+							if(iLoop == 0)
+							{
+								sprintf(&cDisplay[0][0], "%s ", pStringPosition[iLoop]);
+							}
+							else
+							{
+								sprintf(&cDisplay[0][0], "%s%s ", &cDisplay[0][0], pStringPosition[iLoop]);
+							}
+						}
+					}
+					else
+					{
+						iLoopNext = iLoop;
+						break;
+					}
+				}
+			}
+
+			for(iLoop = iLoopNext ; iLoop < 8 ; iLoop++)
+			{
+				if(pStringPosition[iLoop] > 1)
+				{
+					if((strlen(&cDisplay[1][0]) + strlen(pStringPosition[iLoop])) < 20 )
+					{
+						if(pStringPosition[iLoop])
+						{
+							if(iLoop == iLoopNext)
+							{
+								sprintf(&cDisplay[1][0], "%s ", pStringPosition[iLoop]);
+							}
+							else
+							{
+								sprintf(&cDisplay[1][0], "%s%s ", &cDisplay[1][0], pStringPosition[iLoop]);
+							}
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+
+			HD44780_PrintStringXY(&cDisplay[0][0], 0, 0);
+			HD44780_PrintStringXY(&cDisplay[1][0], 1, 0);
+
 		}
 		else
 		{
@@ -288,7 +359,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
 
-		amixer_Volume(0, (pWebRadio->u08Volume * 3));
+		Mplayer_Volume(pWebRadio->u08Volume * 3);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
@@ -298,7 +369,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
 
-		amixer_Volume(0, (pWebRadio->u08Volume * 3));
+		Mplayer_Volume(pWebRadio->u08Volume * 3);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_MIDDLE)
@@ -354,7 +425,7 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 		/* Clear Screen  and switch backlight on */
 		HD44780_Clear();
 		HD44780_Backlight(1);
-		HD44780_PrintStringXY("   connect station", 1, 0);
+		HD44780_PrintStringXY("  connect station", 1, 0);
 
 		u08Sequenz = 0;
 
@@ -404,10 +475,6 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 					Mplayer_PlayFile(cText);
 				}
 			}
-
-			/* Enter_play mode */
-			pWebRadio->u08MenueState = MENUE_PLAY;
-			pWebRadio->u08MenueInit = 1;
 		}
 	}
 
@@ -449,43 +516,43 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 			switch (u08Sequenz++)
 			{
 				case 0:
-					 HD44780_PrintStringXY("     *         ", 2, 0);
+					 HD44780_PrintStringXY("    *         ", 2, 0);
 				break;
 
 				case 1:
-					 HD44780_PrintStringXY("      *       ", 2, 0);
+					 HD44780_PrintStringXY("     *       ", 2, 0);
 				break;
 
 				case 2:
-					 HD44780_PrintStringXY("       *       ", 2, 0);
+					 HD44780_PrintStringXY("      *       ", 2, 0);
 				break;
 
 				case 3:
-					 HD44780_PrintStringXY("        *      ", 2, 0);
+					 HD44780_PrintStringXY("       *      ", 2, 0);
 				break;
 
 				case 4:
-					 HD44780_PrintStringXY("         *     ", 2, 0);
+					 HD44780_PrintStringXY("        *     ", 2, 0);
 				break;
 
 				case 5:
-					 HD44780_PrintStringXY("          *   ", 2, 0);
+					 HD44780_PrintStringXY("         *   ", 2, 0);
 				break;
 
 				case 6:
-					 HD44780_PrintStringXY("           *   ", 2, 0);
+					 HD44780_PrintStringXY("          *   ", 2, 0);
 				break;
 
 				case 7:
-					 HD44780_PrintStringXY("            *  ", 2, 0);
+					 HD44780_PrintStringXY("           *  ", 2, 0);
 				break;
 
 				case 8:
-					 HD44780_PrintStringXY("             * ", 2, 0);
+					 HD44780_PrintStringXY("            * ", 2, 0);
 				break;
 
 				case 9:
-					 HD44780_PrintStringXY("              *", 2, 0);
+					 HD44780_PrintStringXY("             *", 2, 0);
 					 u08Sequenz = 0;
 				break;
 
@@ -502,18 +569,25 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 		pWebRadio->u08MenueInit = 1;
 	}
 
+	if(Message_Read() == MESSAGE_KEY_SETUP)
+	{
+		/* Enter_play mode */
+		pWebRadio->u08MenueState = MENUE_SETUP;
+		pWebRadio->u08MenueInit = 1;
+	}
+
 	if(Message_Read() == MESSAGE_KEY_RIGHT)
 	{
 		if(pWebRadio->u08Volume < 29) pWebRadio->u08Volume++;
 
-		amixer_Volume(0, (pWebRadio->u08Volume * 3));
+		Mplayer_Volume(pWebRadio->u08Volume * 3);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
 		if(pWebRadio->u08Volume > 0) pWebRadio->u08Volume--;
 
-		amixer_Volume(0, (pWebRadio->u08Volume * 3));
+		Mplayer_Volume(pWebRadio->u08Volume * 3);
 	}
 
 	/* was there some actions */
@@ -665,12 +739,12 @@ void Menue_Setup(WEBRADIO *pWebRadio)
 		u08Position = 0;
 	}
 
-	if(Message_Read() == MESSAGE_KEY_RIGHT)
+	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
 		if(u08Position < 3) u08Position++;
 	}
 
-	if(Message_Read() == MESSAGE_KEY_LEFT)
+	if(Message_Read() == MESSAGE_KEY_RIGHT)
 	{
 		if(u08Position > 0) u08Position--;
 	}
@@ -694,15 +768,15 @@ void Menue_Setup(WEBRADIO *pWebRadio)
 	{
 	    switch(u08Position)
 	    {
-            case 2:
+            case 1:
                 /* Wlan Settings */
-                pWebRadio->u08MenueState = MENUE_PLAY;
+                pWebRadio->u08MenueState = MENUE_NET_SETUP;
                 pWebRadio->u08MenueInit = 1;
             break;
 
             case 3:
                 /* Ethernet Settings */
-                pWebRadio->u08MenueState = MENUE_NET_SETUP;
+                pWebRadio->u08MenueState = MENUE_PLAY;
                 pWebRadio->u08MenueInit = 1;
             break;
 
@@ -726,10 +800,10 @@ void Menue_Setup(WEBRADIO *pWebRadio)
 	{
 		INT_U8 u08Loop;
 
-        HD44780_PrintStringXY("Switch Off         ", 0, 1);
-        HD44780_PrintStringXY("Path Settings      ", 1, 1);
-        HD44780_PrintStringXY("Wlan Settings      ", 2, 1);
-        HD44780_PrintStringXY("Ethernet Settings  ", 3, 1);
+		HD44780_PrintStringXY("Off                ", 0, 1);
+		HD44780_PrintStringXY("Wlan Settings      ", 1, 1);
+		HD44780_PrintStringXY("                   ", 2, 1);
+		HD44780_PrintStringXY("Back               ", 3, 1);
 
 		for(u08Loop = 0 ; u08Loop < 4 ; u08Loop++)
 		{
@@ -974,50 +1048,50 @@ void Menue_Quit(WEBRADIO *pWebRadio)
 		/* backlight on */
 		HD44780_Clear();
 		HD44780_Backlight(1);
-		HD44780_PrintStringXY("    exit webradio", 1, 0);
+		HD44780_PrintStringXY("   exit webradio", 1, 0);
 
 		 while(iTimeout--)
 		 {
 			  switch (u08Sequenz++)
 			  {
 					case 0:
-						 HD44780_PrintStringXY("     *         ", 2, 0);
+						 HD44780_PrintStringXY("    *         ", 2, 0);
 					break;
 
 					case 1:
-						 HD44780_PrintStringXY("      *       ", 2, 0);
+						 HD44780_PrintStringXY("     *       ", 2, 0);
 					break;
 
 					case 2:
-						 HD44780_PrintStringXY("       *       ", 2, 0);
+						 HD44780_PrintStringXY("      *       ", 2, 0);
 					break;
 
 					case 3:
-						 HD44780_PrintStringXY("        *      ", 2, 0);
+						 HD44780_PrintStringXY("       *      ", 2, 0);
 					break;
 
 					case 4:
-						 HD44780_PrintStringXY("         *     ", 2, 0);
+						 HD44780_PrintStringXY("        *     ", 2, 0);
 					break;
 
 					case 5:
-						 HD44780_PrintStringXY("          *   ", 2, 0);
+						 HD44780_PrintStringXY("         *   ", 2, 0);
 					break;
 
 					case 6:
-						 HD44780_PrintStringXY("           *   ", 2, 0);
+						 HD44780_PrintStringXY("          *   ", 2, 0);
 					break;
 
 					case 7:
-						 HD44780_PrintStringXY("            *  ", 2, 0);
+						 HD44780_PrintStringXY("           *  ", 2, 0);
 					break;
 
 					case 8:
-						 HD44780_PrintStringXY("             * ", 2, 0);
+						 HD44780_PrintStringXY("            * ", 2, 0);
 					break;
 
 					case 9:
-						 HD44780_PrintStringXY("              *", 2, 0);
+						 HD44780_PrintStringXY("             *", 2, 0);
 						 u08Sequenz = 0;
 					break;
 
@@ -1035,10 +1109,16 @@ void Menue_Quit(WEBRADIO *pWebRadio)
 
 		/* add settings to path */
 		sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, SETTINGS_PATH);
-
 		/* save the Webradio settings */
-		iResult = Settings_Write(SETTINGS_PATH, pWebRadio);
+		iResult = Settings_Write(cFullPath, pWebRadio);
+		if(iResult < 0)
+		{
+			printf("Settings write error\r\n");
+		}
 
+		Mplayer_Close();
+
+		sleep(1);
 
 		/* Network off */
 		iResult = Network_Down();
@@ -1047,14 +1127,14 @@ void Menue_Quit(WEBRADIO *pWebRadio)
 			printf("Can't stop network\r\n");
 		}
 
-		(void)Mplayer_PlayCommand(MP_QUIT);
-		sleep(1);
-		Mplayer_Close();
+		printf("end\r\n");
 	}
 
-	if(Message_Read() == MESSAGE_KEY_SETUP)
+	if(Message_Read() == MESSAGE_KEY_MIDDLE)
 	{
-        pWebRadio->u08MenueState = MENUE_START;
+		printf("key start\r\n");
+      pWebRadio->u08MenueState = MENUE_START;
+		pWebRadio->u08MenueInit = 1;
 	}
 }
 
