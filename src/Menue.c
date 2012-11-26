@@ -65,15 +65,13 @@ void Menue_Start(WEBRADIO *pWebRadio)
 	Message_Init(0, 1, 2);
 
 	HD44780_Clear();
-	HD44780_Backlight(1);
    HD44780_PrintStringXY("   start webradio", 1, 0);
+	HD44780_Backlight(1);
 
-#if 0
 	if(-1 == Network_Up())
 	{
 		printf("Can't start network\r\n");
 	}
-#endif
 
 #ifdef SIMULANT
 	/* get full path */

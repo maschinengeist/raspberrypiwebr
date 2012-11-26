@@ -34,7 +34,7 @@ static WEBRADIO WebRadio;
 
 int main(void)
 {
-	printf("start webradio\r\n");
+	printf("start webradio x\r\n");
 
 	Init();
 
@@ -51,7 +51,7 @@ int main(void)
    return 0;
 }
 
-void SVT_DebugCall(CHAR *pText)
+void DebugPrintf(CHAR *pText)
 {
 	printf(pText);
 }
