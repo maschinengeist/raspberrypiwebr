@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="Simulant" />
+	<ActiveTarget name="Debug" />
 	<File name="Dogm160x104/dogm160x104.h" open="0" top="0" tabpos="5">
 		<Cursor position="1445" topLine="42" />
 	</File>
@@ -34,8 +34,8 @@
 	<File name="inc/Init.h" open="0" top="0" tabpos="0">
 		<Cursor position="275" topLine="0" />
 	</File>
-	<File name="inc/Menue.h" open="0" top="0" tabpos="7">
-		<Cursor position="1203" topLine="34" />
+	<File name="inc/Menue.h" open="1" top="0" tabpos="9">
+		<Cursor position="1654" topLine="50" />
 	</File>
 	<File name="inc/Station.h" open="0" top="0" tabpos="8">
 		<Cursor position="327" topLine="9" />
@@ -53,7 +53,7 @@
 		<Cursor position="294" topLine="0" />
 	</File>
 	<File name="main.cpp" open="1" top="0" tabpos="5">
-		<Cursor position="956" topLine="33" />
+		<Cursor position="606" topLine="2" />
 	</File>
 	<File name="spi/spi.h" open="0" top="0" tabpos="6">
 		<Cursor position="48" topLine="0" />
@@ -67,17 +67,17 @@
 	<File name="src/Init.c" open="0" top="0" tabpos="2">
 		<Cursor position="1031" topLine="30" />
 	</File>
-	<File name="src/Menue.c" open="1" top="1" tabpos="1">
-		<Cursor position="1679" topLine="57" />
+	<File name="src/Menue.c" open="1" top="0" tabpos="1">
+		<Cursor position="1620" topLine="57" />
 	</File>
 	<File name="src/Mplayer.c" open="1" top="0" tabpos="4">
-		<Cursor position="2056" topLine="61" />
+		<Cursor position="2063" topLine="1" />
 	</File>
-	<File name="src/Network.c" open="1" top="0" tabpos="3">
-		<Cursor position="6952" topLine="245" />
+	<File name="src/Network.c" open="1" top="1" tabpos="3">
+		<Cursor position="6093" topLine="201" />
 	</File>
 	<File name="src/Settings.c" open="1" top="0" tabpos="2">
-		<Cursor position="2164" topLine="72" />
+		<Cursor position="2168" topLine="63" />
 	</File>
 	<File name="src/Station.c" open="0" top="0" tabpos="10">
 		<Cursor position="4338" topLine="180" />

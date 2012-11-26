@@ -210,7 +210,7 @@ int Network_Up(void)
 {
 	FILE *fp;
 
-	fp = popen("ifconfig up\r\n", "r+");
+	fp = popen("ifup wlan0\r\n", "r+");
 
 	/* pipe successfully opened? */
 	if(fp != NULL)
@@ -224,21 +224,6 @@ int Network_Up(void)
 	}
 
 	sleep(1);
-
-	/* create fifo in temp */
-	printf("iwconfig wlan0 essid \"HerrRossi\"\r\n");
-	fp = popen("iwconfig wlan0 essid \"HerrRossi\"\r\n", "r+");
-
-	/* pipe successfully opened? */
-	if(fp != NULL)
-	{
-		fclose(fp);
-	}
-	else
-	{
-		printf("ifup wlan0 error\r\n");
-		return -1;
-	}
 
 	return 1;
 }
