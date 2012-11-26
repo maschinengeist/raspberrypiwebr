@@ -84,9 +84,9 @@ void Menue_Start(WEBRADIO *pWebRadio)
 	sprintf(cFullPath, "%s%s",pWebRadio->cFullPath, SETTINGS_PATH);
 #else
 	sprintf(pWebRadio->cFullPath, "/WebRadio");
+	sprintf(cFullPath, "/WebRadio%s", SETTINGS_PATH);
 #endif
 
-	sprintf(cFullPath, "/WebRadio%s", SETTINGS_PATH);
 	/* read setting of the webradio */
 	iResult = Settings_Read(cFullPath, pWebRadio);
 	if(iResult < 0)
