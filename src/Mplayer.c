@@ -15,8 +15,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+
 #include "mytypes.h"
 #include "Mplayer.h"
+#include "debug.h"
 
 
 /*************************************************************************
@@ -32,8 +34,6 @@
 static FILE *fpMplayer;
 static char cText[MPLAYER_COMMAND_SIZE];
 static STREAM_ENTRY StreamEntry;
-char ICY_Stream[] = "ICY Info: StreamTitle='The Fureys & Davey Arthur - When you were sweet sixteen (remastered)';StreamUrl='&artist=The%20Fureys%20%26%20Davey%20Arthur&title=When%20you%20were%20sweet%20sixteen%20%28remastered%29&album=Ultimate%20Irish%20Pub%20Songs%20%5BOriginal%20recording%20remastered%5D&duration=310727%';";
-
 
 /*************************************************************************
 *   F O R W A R D   D E C L A R A T I O N
@@ -41,7 +41,7 @@ char ICY_Stream[] = "ICY Info: StreamTitle='The Fureys & Davey Arthur - When you
 
 int Mplayer_WriteFifo(char* cCommand)
 {
-    FILE* fpFifo;
+   FILE* fpFifo;
 
     /* file for sending to mplayer */
 	fpFifo = fopen("/tmp/fifofile", "r+");
@@ -49,10 +49,10 @@ int Mplayer_WriteFifo(char* cCommand)
 	/* file successfully opened? */
 	if(fpFifo != NULL)
 	{
-        fputs(cCommand, fpFifo);
-        fclose(fpFifo);
+		fputs(cCommand, fpFifo);
+		fclose(fpFifo);
 
-        return 1;
+		return 1;
 	}
 
 	return -1;
@@ -70,18 +70,19 @@ int Mplayer_WriteFifo(char* cCommand)
 int Mplayer_Start(void)
 {
    int iFlag;
+   FILE* fpFifo;
 
 	/* create fifo in temp */
-	fpMplayer = popen("mkfifo /tmp/fifofile", "r");
+	fpFifo = popen("mkfifo /tmp/fifofile", "r");
 
 	/* pipe successfully opened? */
-	if(fpMplayer != NULL)
+	if(fpFifo != NULL)
 	{
-		fclose(fpMplayer);
+		fclose(fpFifo);
 	}
 	else
 	{
-		printf("open error\r\n");
+		DB_PRINTF(("mkfifo create error\n"));
 		return -1;
 	}
 
@@ -108,116 +109,14 @@ int Mplayer_Start(void)
 		else
 		{
 			fclose(fpMplayer);
-			printf("close mplayer\r\n");
+			fpMplayer = NULL;
+			DB_PRINTF(("close mplayer\n"));
 			return -1;
 		}
 	}
 
 	return -1;
 }
-
-
-/************************************************************************
-*/
-/*! \fn int Mplayer_GetStreamInfo(STREAM_ENTRY* pStreamEntry)
-
-*   \brief get info of steam, station, titel, genre and so on
-*
-*   \return int --> -1 no info, 1 get stream info
-*
-*************************************************************************/
-int Mplayer_GetStreamEntries(STREAM_ENTRY* pStreamEntry)
-{
-	char* pResult;
-	char* pPosition, *pEntriePointer;
-	unsigned char u08Loop;
-	char cEscapeData[4], cSearchString[32];
-	int iValue, iEntryCount = 0, iEntrySize = 0;
-
-	pResult = fgets(cText, MPLAYER_COMMAND_SIZE, fpMplayer);
-	if(pResult == 0) return -1;
-
-	/* if mplayer startet ? */
-	if(0 == (memcmp(cText, "ICY Info: StreamTitle='", strlen("ICY Info: StreamTitle='"))))
-	{
-		/* get max string length */
-		//iTextLength = strlen(cText);
-
-		/* set all entrys to zero */
-		memset(&StreamEntry, 0x00, sizeof(StreamEntry));
-
-		for(u08Loop = 0 ;u08Loop < 3 ; u08Loop++)
-		{
-			switch(u08Loop)
-			{
-				case 0:
-				  	memset(cSearchString, 0x00, sizeof(cSearchString));
-				  	memcpy(cSearchString ,"&artist=", strlen("&artist="));
-				  	pEntriePointer = StreamEntry.cArtist;
-				  	iEntrySize = sizeof(StreamEntry.cArtist);
-				break;
-
-				case 1:
-				  	memset(cSearchString, 0x00, sizeof(cSearchString));
-				  	memcpy(cSearchString ,"&title=", strlen("&titel="));
-				  	pEntriePointer = StreamEntry.cTitle;
-				  	iEntrySize = sizeof(StreamEntry.cTitle);
-				break;
-
-				case 2:
-				  	memset(cSearchString, 0x00, sizeof(cSearchString));
-				  	memcpy(cSearchString ,"&album=", strlen("&album="));
-				  	pEntriePointer = StreamEntry.cAlbum;
-				  	iEntrySize = sizeof(StreamEntry.cAlbum);
-				break;
-
-				default:
-				break;
-			}
-
-			pPosition = strstr(cText, cSearchString);
-
-			if(pPosition)
-			{
-				pPosition += strlen(cSearchString);
-				iEntryCount = 0;
-
-				do
-				{
-					if((iEntryCount + 1) < iEntrySize)
-					{
-						if(*pPosition == '%')
-						{
-							pPosition++;
-
-							memcpy(cEscapeData, pPosition, 2);
-							cEscapeData[3] = 0;
-
-							sscanf(cEscapeData, "%x", &iValue);
-							pPosition++;
-
-							pEntriePointer[iEntryCount++] = iValue;
-						}
-						else if(*pPosition != '&')
-						{
-							pEntriePointer[iEntryCount++] = *pPosition;
-						}
-					}
-				}
-				while(*(pPosition++) != '&');
-			}
-		}
-
-		/* copy stream */
-		memcpy(pStreamEntry, &StreamEntry, sizeof(StreamEntry));
-
-		return 1;
-	}
-
-	return -1;
-}
-
-
 
 /************************************************************************
 */
@@ -230,31 +129,51 @@ int Mplayer_GetStreamEntries(STREAM_ENTRY* pStreamEntry)
 *************************************************************************/
 int Mplayer_GetStreamInfo(char* cStreamInfo, int iMaxSize)
 {
-	char* pResult;
+	char* pResult = NULL;
 	char cText[256];
-	int iPosition;
+	int iPosition = 0;
 
-	pResult = fgets(cText, sizeof(cText), fpMplayer);
-	if(pResult == 0) return -1;
-
-	/* if mplayer startet ? */
-	if(0 == (memcmp(cText, "ICY Info: StreamTitle='", strlen("ICY Info: StreamTitle='"))))
+	if(fpMplayer != NULL)
 	{
-		/* set all entrys to zero */
-		memset(cStreamInfo, 0x00, iMaxSize);
+		pResult = fgets(cText, sizeof(cText), fpMplayer);
+	}
+	else
+	{
+		(void)Mplayer_Start();
+	}
 
-		iPosition = strlen("ICY Info: StreamTitle='");
+	if(pResult != NULL)
+	{
+		DB_PRINTF(("Mplayer_GetStreamInfo fgets\n"));
 
-		while(cText[iPosition] != '\'')
+		/* if mplayer startet ? */
+		if(0 == (memcmp(cText, "ICY Info: StreamTitle='", strlen("ICY Info: StreamTitle='"))))
 		{
-			*cStreamInfo = cText[iPosition++];
-			cStreamInfo++;
+			/* set all entrys to zero */
+			memset(cStreamInfo, 0x00, iMaxSize);
 
-			iMaxSize--;
-			if(iMaxSize == 0) return -1;
+			DB_PRINTF(("iPosition :%d\n", iPosition));
+
+			iPosition = strlen("ICY Info: StreamTitle='");
+
+			while(cText[iPosition] != '\'')
+			{
+				if(iPosition < sizeof(cText))
+				{
+					*cStreamInfo = cText[iPosition++];
+					cStreamInfo++;
+				}
+
+				iMaxSize--;
+				if(iMaxSize == 0) return -1;
+			}
+
+			return 1;
 		}
-
-		return 1;
+	}
+	else
+	{
+		return -1;
 	}
 
 	return -1;
@@ -379,6 +298,7 @@ int Mplayer_Close(void)
 
    /* close pipe */
    fclose(fpMplayer);
+	fpMplayer = NULL;
 
    return iResult;
 }

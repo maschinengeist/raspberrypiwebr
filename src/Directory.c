@@ -70,7 +70,10 @@ int Directory_Open(char *cDir)
 	/* clear entrie counts */
 	iMaxEntries = 0;
 
-	chdir(cDir);
+	if(chdir(cDir) < 0)
+	{
+		printf("chdir error\n");
+	}
 
 	getcwd(cDir, 255);
 

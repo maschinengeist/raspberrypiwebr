@@ -67,13 +67,27 @@ int Settings_Read(char* cPath, WEBRADIO *pWebRadio)
 
 		iSize = fscanf(fpSettings, "volume=%d\n", &iValue);
 		if(iSize == 0) return -1;
-
 		pWebRadio->u08Volume = (INT_U8)iValue;
 
 		iSize = fscanf(fpSettings, "station=%d\n", &iValue);
 		if(iSize == 0) return -1;
-
 		pWebRadio->u08Station = (INT_U8)iValue;
+
+		iSize = fscanf(fpSettings, "news station=%d\n", &iValue);
+		if(iSize == 0) return -1;
+		pWebRadio->u08NewsStatio = (INT_U8)iValue;
+
+		iSize = fscanf(fpSettings, "news station start time=%d\n", &iValue);
+		if(iSize == 0) return -1;
+		pWebRadio->u08NewsStatioStartTime = (INT_U8)iValue;
+
+		iSize = fscanf(fpSettings, "news station interval time=%d\n", &iValue);
+		if(iSize == 0) return -1;
+		pWebRadio->u08NewsStatioIntervalTime = (INT_U8)iValue;
+
+		iSize = fscanf(fpSettings, "news station duration time=%d\n", &iValue);
+		if(iSize == 0) return -1;
+		pWebRadio->u08NewsStatioDurationTime = (INT_U8)iValue;
 
 		fclose(fpSettings);
 
@@ -105,13 +119,20 @@ int Settings_Write(char* cPath, WEBRADIO *pWebRadio)
 	/* open file */
 	if(fpSettings > 0)
 	{
-
 		/* if seek failed return with an error */
 		if(fseek(fpSettings, 0, SEEK_SET) < 0) return -1;
 
 		fprintf(fpSettings, "volume=%d\n", (int)pWebRadio->u08Volume);
 
 		fprintf(fpSettings, "station=%d\n", (int)pWebRadio->u08Station);
+
+		fprintf(fpSettings, "news station=%d\n", (int)pWebRadio->u08NewsStatio);
+
+		fprintf(fpSettings, "news station start time=%d\n", (int)pWebRadio->u08NewsStatioStartTime);
+
+		fprintf(fpSettings, "news station interval time=%d\n", (int)pWebRadio->u08NewsStatioIntervalTime);
+
+		fprintf(fpSettings, "news station duration time=%d\n", (int)pWebRadio->u08NewsStatioDurationTime);
 
 		fclose(fpSettings);
 	}

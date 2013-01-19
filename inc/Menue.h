@@ -16,7 +16,7 @@
 
 enum MENUE
 {
-	MENUE_START = 0,
+	MENUE_ON = 0,
 	MENUE_DIR,
 	MENUE_PLAY,
 	MENUE_CHANGE_STATION,
@@ -24,7 +24,9 @@ enum MENUE
 	MENUE_STATION,
 	MENUE_NET_SETUP,
 	MENUE_NET_SETUP_IP,
-	MENUE_QUIT
+	MENUE_NEWSSTATION_SET_STATION,
+	MENUE_NEWSSTATION_SET_TIME,
+	MENUE_OFF
 } ;
 
 /**************************************************************************************
@@ -67,6 +69,14 @@ typedef struct _WEBRADIO
    INT_U8   u08OldStation;
    /* if 1 the station will be change */
    INT_U8   u08InitStation;
+   /* The news station when switch to news */
+   INT_U8   u08NewsStatio;
+   /* The start time to switch from current station to the news */
+   INT_U8   u08NewsStatioStartTime;
+   /* The interval time for example every 30 minutes */
+   INT_U8   u08NewsStatioIntervalTime;
+   /* The news time duration for example 5 minutes*/
+   INT_U8   u08NewsStatioDurationTime;
    /* information of current selectet station position */
    INT_U8   u08MenueStationPosition;
    /* Maximum available Channels */
@@ -85,15 +95,17 @@ typedef struct _WEBRADIO
 *   P R O T O T Y P E
 ***************************************************************************************/
 
+void Menue_On(WEBRADIO *pWebRadio);
+
 void Menue_Select(WEBRADIO *pWebRadio);
-
-void Menue_Play(WEBRADIO *pWebRadio);
-
-void Menue_Station(WEBRADIO *pWebRadio);
 
 void Menue_Settings(WEBRADIO *pWebRadio);
 
-void Menue_Select(WEBRADIO *pWebRadio);
+void Menue_NewsStation_SetStation(WEBRADIO *pWebRadio);
+
+void Menue_NewsStation_SetTime(WEBRADIO *pWebRadio);
+
+void Menue_Off(WEBRADIO *pWebRadio);
 
 
 #ifdef __cplusplus

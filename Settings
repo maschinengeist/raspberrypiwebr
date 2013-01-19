@@ -1,4 +1,6 @@
-volume=21
-station=1
-
-
+volume=20
+station=2
+news station=4
+news station start time=0
+news station interval time=15
+news station duration time=5

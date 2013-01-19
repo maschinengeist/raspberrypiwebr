@@ -190,7 +190,7 @@ RESULT gpio_Write(INT_U8 u08GpioPin, INT_U8 u08Value)
 INT_U8 gpio_Read(INT_U8 u08GpioPin)
 {
 	FILE* fd_gpio = 0;
-	INT_U8 u08State;
+	INT_U8 u08State = 0;
 
 	CHAR cGpioPath[64], cState[8];
 
@@ -202,9 +202,15 @@ INT_U8 gpio_Read(INT_U8 u08GpioPin)
 	}
 	else
 	{
-		fread(cState, 1, 1, fd_gpio);
-		if(cState[0] == '1') u08State = 1;
-		else u08State = 0;
+		if(fread(cState, 1, 1, fd_gpio) < 0)
+		{
+			printf("fread error\n");
+		}
+		else
+		{
+			if(cState[0] == '1') u08State = 1;
+			else u08State = 0;
+		}
 
 		fclose(fd_gpio);
 	}

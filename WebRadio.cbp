@@ -127,6 +127,12 @@
 		<Unit filename="src/Menue.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/Menue_OnOff.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Menue_Play.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/Mplayer.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -208,6 +208,7 @@ int Network_WriteSettings(char* cPath, NETWORK_SETTINGS *pSettings)
 *************************************************************************/
 int Network_Up(void)
 {
+
 	FILE *fp;
 
 	fp = popen("ifup wlan0\r\n", "r+");
