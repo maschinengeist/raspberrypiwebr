@@ -432,12 +432,6 @@ void Menue_NewsStation_SetTime(WEBRADIO *pWebRadio)
 
 void Menue_Select(WEBRADIO *pWebRadio)
 {
-	time_t rawtime;
-	struct tm * timeinfo;
-
-	static INT_U8 u08Start = 1, u08StopTime = 0;
-	INT_U8 u08Minuten;
-
 	/* read last mesage and enter menue */
 	Message_Get();
 
@@ -448,67 +442,7 @@ void Menue_Select(WEBRADIO *pWebRadio)
 		break;
 
 		case MENUE_PLAY:
-		{
 			Menue_Play(pWebRadio);
-
-			/* check time */
-			time (&rawtime);
-			timeinfo = localtime(&rawtime);
-
-			u08Minuten = (INT_U8)timeinfo->tm_min;
-
-			if(!(pWebRadio->u08NewsStatioStartTime == 0xff))
-			{
-				if(u08Minuten >= pWebRadio->u08NewsStatioStartTime)
-				{
-					u08Minuten -= pWebRadio->u08NewsStatioStartTime;
-
-					if((u08Minuten % pWebRadio->u08NewsStatioIntervalTime) == 0)
-					{
-						if(u08Start == 1)
-						{
-							u08Start = 0;
-							printf("\n\n\n\n\n\n");
-							printf("Current Minute %d\n", (int)timeinfo->tm_sec);
-							printf("Minute %d\n", (int)u08Minuten);
-
-							u08StopTime = u08Minuten + pWebRadio->u08NewsStatioDurationTime;
-							printf("Stop Time %d\n",  u08StopTime);
-
-							pWebRadio->u08OldStation = pWebRadio->u08Station;
-							pWebRadio->u08Station = pWebRadio->u08NewsStatio;
-
-							/* Enter_play mode */
-							pWebRadio->u08MenueState = MENUE_CHANGE_STATION;
-							pWebRadio->u08InitStation = 1;
-							pWebRadio->u08MenueInit = 1;
-
-							printf("news on\n");
-						}
-					}
-
-					if(u08Start == 0)
-					{
-						if(u08Minuten == u08StopTime)
-						{
-							u08Start = 1;
-
-							pWebRadio->u08Station = pWebRadio->u08OldStation;
-
-							/* Enter_play mode */
-							pWebRadio->u08MenueState = MENUE_CHANGE_STATION;
-							pWebRadio->u08InitStation = 1;
-							pWebRadio->u08MenueInit = 1;
-
-							printf("\n\n\n\n\n\n");
-							printf("Current Minute %d\n", (int)timeinfo->tm_sec);
-							printf("Minute %d\n", (int)u08Minuten);
-							printf("news off\n");
-						}
-					}
-				}
-			}
-		}
 		break;
 
 		case MENUE_CHANGE_STATION:
