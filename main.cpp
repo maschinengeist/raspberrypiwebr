@@ -34,7 +34,7 @@ static WEBRADIO WebRadio;
 int main(void)
 {
 	printf("start webradio  \r\n");
-	printf("build 19.01.2013\r\n");
+	printf("build 07.02.2013\r\n");
 
 	Init();
 
