@@ -57,6 +57,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 {
 	int iResult, iLength;
 	#define MAX_SONG_LENGTH 21
+	#define MAX_DISPLAY_STRING_LENGTH 16
 
 	time_t rawtime;
 	struct tm * timeinfo;
@@ -87,12 +88,14 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		Message_Set(MESSAGE_REFRESH_SCREEN);
 
 		iLength = strlen(pWebRadio->cStation);
-		if(iLength > 20)
+		/* get legth of station text */
+		if(iLength > MAX_DISPLAY_STRING_LENGTH)
 		{
 			char* pStringPosition[8];
 			int iLoop, iLoopNext;
 			char cDisplay[2][32];
 
+			/* set pointer to zero */
 			memset(pStringPosition, 0x00, sizeof(pStringPosition));
 
 			pStringPosition[0] = &pWebRadio->cStation[0];
@@ -116,7 +119,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 			{
 				if(pStringPosition[iLoop])
 				{
-					if((strlen(&cDisplay[0][0]) + strlen(pStringPosition[iLoop])) < 20 )
+					if((strlen(&cDisplay[0][0]) + strlen(pStringPosition[iLoop])) < MAX_DISPLAY_STRING_LENGTH )
 					{
 						if(pStringPosition[iLoop])
 						{
@@ -142,7 +145,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 			{
 				if(pStringPosition[iLoop] > (char*)1)
 				{
-					if((strlen(&cDisplay[1][0]) + strlen(pStringPosition[iLoop])) < 20 )
+					if((strlen(&cDisplay[1][0]) + strlen(pStringPosition[iLoop])) < MAX_DISPLAY_STRING_LENGTH)
 					{
 						if(pStringPosition[iLoop])
 						{
