@@ -18,11 +18,11 @@
 *   P R O T O T Y P E
 ***************************************************************************************/
 
-void Menue_Play(WEBRADIO *pWebRadio);
+void Menue_Play(void);
 
-void Menue_ChangeStation(WEBRADIO *pWebRadio);
+void Menue_ChangeStation(void);
 
-void Menue_Station(WEBRADIO *pWebRadio);
+void Menue_Station(void);
 
 
 #ifdef __cplusplus

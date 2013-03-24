@@ -21,16 +21,12 @@
 #include "mytypes.h"
 #include "debug.h"
 
-#include "Station.h"
-#include "gpio.h"
 #include "message.h"
-#include "Network.h"
 #include "Menue.h"
 #include "Menue_Play.h"
 #include "Mplayer.h"
-#include "Settings.h"
 #include "Directory.h"
-#include "amixer.h"
+#include "Webradio.h"
 
 #include "HD44780.h"
 
@@ -38,12 +34,6 @@
 /*************************************************************************
 *   D E F I N E
 *************************************************************************/
-
-#define NETWORK_PATH "Network.conf"
-
-#define SETTINGS_PATH "/Settings"
-
-#define STATION_PATH "/Station"
 
 /*************************************************************************
 *   G L O B A L
@@ -53,7 +43,7 @@
 *   M E N U E   P L A Y
 *************************************************************************/
 
-void Menue_Play(WEBRADIO *pWebRadio)
+void Menue_Play(void)
 {
 	int iResult, iLength;
 	#define MAX_SONG_LENGTH 21
@@ -67,6 +57,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 	static INT_U8 u08SongPosition, u08DisplayCounter = 25;
 	static INT_U8 u08Start = 1, u08StopTime = 0;
 
+
 	INT_U8 u08Position = 0, u08Loop, u08Minuten;
 
 	/* get time */
@@ -74,20 +65,14 @@ void Menue_Play(WEBRADIO *pWebRadio)
 	timeinfo = localtime(&rawtime);
 
 	/* init new menue screen */
-	if(pWebRadio->u08MenueInit)
+	if(Menue_Init(0))
 	{
-		/* Clear Screen  and switch backlight on */
-		HD44780_Clear();
-
-		/* set timeout of start value */
-		pWebRadio->u08MenueInit = 0;
-		pWebRadio->u16BacklightTimeout = 2000;
-		pWebRadio->u16Timeout = 0;
-
 		/* send message to refresh the display */
 		Message_Set(MESSAGE_REFRESH_SCREEN);
 
-		iLength = strlen(pWebRadio->cStation);
+		strcpy(cText, Webradio_GetStation(0));
+
+		iLength = strlen(cText);
 		/* get legth of station text */
 		if(iLength > MAX_DISPLAY_STRING_LENGTH)
 		{
@@ -98,7 +83,7 @@ void Menue_Play(WEBRADIO *pWebRadio)
 			/* set pointer to zero */
 			memset(pStringPosition, 0x00, sizeof(pStringPosition));
 
-			pStringPosition[0] = &pWebRadio->cStation[0];
+			pStringPosition[0] = &cText[0];
 
 			for(iLoop = 0 ; iLoop < 7 ; iLoop++)
 			{
@@ -171,18 +156,21 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		}
 		else
 		{
-			HD44780_PrintStringXY(pWebRadio->cStation, 0, 0);
+			HD44780_PrintStringXY(Webradio_GetStation(0), 0, 0);
 		}
+
+		sprintf(cText, " %02d:%02d", (timeinfo->tm_hour+1)%24, timeinfo->tm_min);
+		HD44780_PrintStringXY(cText, 0, 14);
 	}
 
 	/* get stream info and clear info when new info receive */
-	iResult = Mplayer_GetStreamInfo(pWebRadio->cStreamInfo, sizeof(pWebRadio->cStreamInfo));
+	iResult = Mplayer_GetStreamInfo(Webradio_GetStreamInfo(0), STREAM_INFO_LENGTH);
 	if(iResult > 0) HD44780_PrintStringXY("                    ", 3, 0);
 
- 	if(pWebRadio->u16Timeout == 0)
+ 	if(Menue_CheckTimeout())
  	{
  		/* get stream info and clear info when new info receive */
- 		iResult = Mplayer_GetStreamInfo(pWebRadio->cStreamInfo, sizeof(pWebRadio->cStreamInfo));
+ 		iResult = Mplayer_GetStreamInfo(Webradio_GetStreamInfo(0), STREAM_INFO_LENGTH);
  		if(iResult > 0) HD44780_PrintStringXY("                    ", 3, 0);
 
 		if(u08DisplayCounter)
@@ -191,14 +179,12 @@ void Menue_Play(WEBRADIO *pWebRadio)
 		}
 		else
 		{
-			char cTime[32];
-
 			u08DisplayCounter = 25;
 
 			/* moving info */
-			if(strlen(pWebRadio->cStreamInfo) < MAX_SONG_LENGTH)
+			if(strlen(Webradio_GetStreamInfo(0)) < MAX_SONG_LENGTH)
 			{
-				strcpy(cCurrentSong, pWebRadio->cStreamInfo);
+				strcpy(cCurrentSong, Webradio_GetStreamInfo(0));
 			}
 			else
 			{
@@ -208,11 +194,11 @@ void Menue_Play(WEBRADIO *pWebRadio)
 				for(u08Loop = 0 ; u08Loop < MAX_SONG_LENGTH ; u08Loop++)
 				{
 					 CHAR cChar;
-					 cChar = pWebRadio->cStreamInfo[u08Loop + u08Position];
+					 cChar = *Webradio_GetStreamInfo(u08Loop + u08Position);
 
 					 if(cChar && u08Null)
 					 {
-						  cCurrentSong[u08Loop] = pWebRadio->cStreamInfo[u08Loop + u08SongPosition];
+						  cCurrentSong[u08Loop] = *Webradio_GetStreamInfo(u08Loop + u08SongPosition);
 					 }
 					 else
 					 {
@@ -223,99 +209,79 @@ void Menue_Play(WEBRADIO *pWebRadio)
 								cCurrentSong[u08Loop++] = 32;
 						  }
 
-						  cCurrentSong[u08Loop] = pWebRadio->cStreamInfo[u08Position++];
+						  cCurrentSong[u08Loop] = *Webradio_GetStreamInfo(u08Position++);
 					 }
 				}
 			}
 
 			u08SongPosition++;
 
-			if(u08SongPosition >= strlen(pWebRadio->cStreamInfo)) u08SongPosition = 0;
+			if(u08SongPosition >= strlen(Webradio_GetStreamInfo(0))) u08SongPosition = 0;
 
 			cCurrentSong[20] = 0;
 			HD44780_PrintStringXY(cCurrentSong, 3, 0);
 
 			cCurrentSong[MAX_SONG_LENGTH - 1] = 0;
 
-			sprintf(cTime, " %02d:%02d", (timeinfo->tm_hour+1)%24, timeinfo->tm_min);
-			HD44780_PrintStringXY(cTime, 0, 14);
+			sprintf(cText, " %02d:%02d", (timeinfo->tm_hour+1)%24, timeinfo->tm_min);
+			HD44780_PrintStringXY(cText, 0, 14);
 		}
  	}
 
 	if(Message_Read() == MESSAGE_KEY_RIGHT)
 	{
-		if(pWebRadio->u08Volume < 30) pWebRadio->u08Volume++;
+		INT_U8 u08Volume = Webradio_Plus(VOLUME);
 		/* display volume */
-		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
+		sprintf(cText, "          Volume:%3d", u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
 
-		Mplayer_Volume(pWebRadio->u08Volume * 3);
+		Mplayer_Volume(u08Volume * 3);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
-		if(pWebRadio->u08Volume > 0) pWebRadio->u08Volume--;
+		INT_U8 u08Volume = Webradio_Minus(VOLUME);
 		/* display volume */
-		sprintf(cText, "          Volume:%3d", pWebRadio->u08Volume);
+		sprintf(cText, "          Volume:%3d", u08Volume);
 		HD44780_PrintStringXY(cText, 3, 0);
 
-		Mplayer_Volume(pWebRadio->u08Volume * 3);
+		Mplayer_Volume(u08Volume * 3);
 	}
 
-	if(Message_Read() == MESSAGE_KEY_MIDDLE)
-	{
-		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_STATION;
-		pWebRadio->u08MenueInit = 1;
-	}
+	/* Enter_play mode */
+	if(Message_Read() == MESSAGE_KEY_MIDDLE) Menue_ChangeMenue(MENUE_STATION);
 
-	if(Message_Read() == MESSAGE_KEY_SETUP)
-	{
-		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_SETUP;
-		pWebRadio->u08MenueInit = 1;
-	}
+	/* Enter_play mode */
+	if(Message_Read() == MESSAGE_KEY_SETUP) Menue_ChangeMenue(MENUE_SETUP);
 
- 	/* decrement menue timeout */
- 	if(pWebRadio->u16Timeout)
- 	{
- 		pWebRadio->u16Timeout--;
- 	}
-
-	/* was there some actions */
-	if(Message_Read())
-	{
-		/* set timeout of start value */
-		pWebRadio->u16Timeout = 200;
-		pWebRadio->u16BacklightTimeout = 2000;
-	}
-
+	/* was there some actions the set timeout of start value */
+	if(Message_Read()) Menue_SetTimeout(200);
 
 	/* check news station time */
 	u08Minuten = (INT_U8)timeinfo->tm_min;
 
-	if(!(pWebRadio->u08NewsStatioStartTime == 0xff))
+	if(!(Webradio_Get(START_TIME) == 0xff))
 	{
-		if(u08Minuten >= pWebRadio->u08NewsStatioStartTime)
+		if(u08Minuten >= Webradio_Get(START_TIME))
 		{
-			u08Minuten -= pWebRadio->u08NewsStatioStartTime;
+			u08Minuten -= Webradio_Get(START_TIME);
 
-			if((u08Minuten % pWebRadio->u08NewsStatioIntervalTime) == 0)
+			if((u08Minuten % Webradio_Get(INTERVAL_TIME)) == 0)
 			{
 				if(u08Start == 1)
 				{
 					u08Start = 0;
-					u08StopTime = u08Minuten + pWebRadio->u08NewsStatioDurationTime;
+					u08StopTime = u08Minuten + Webradio_Get(DURATION_TIME);
 
-					pWebRadio->u08OldStation = pWebRadio->u08Station;
-					pWebRadio->u08Station = pWebRadio->u08NewsStatio;
+					Webradio_Set(NEWS_SAVE_STATION, Webradio_Get(STATION));
 
-					/* Enter_play mode */
-					pWebRadio->u08MenueState = MENUE_CHANGE_STATION;
-					pWebRadio->u08InitStation = 1;
-					pWebRadio->u08MenueInit = 1;
-
-					printf("news on\n");
+					if(!(Webradio_Get(STATION) == Webradio_Get(NEWS_STATION)))
+					{
+						/* set news station */
+						Webradio_Set(STATION, Webradio_Get(NEWS_STATION));
+						/* switch to new station */
+						Menue_ChangeMenue(MENUE_CHANGE_STATION);
+					}
 				}
 			}
 
@@ -324,12 +290,13 @@ void Menue_Play(WEBRADIO *pWebRadio)
 				if(u08Minuten == u08StopTime)
 				{
 					u08Start = 1;
-					pWebRadio->u08Station = pWebRadio->u08OldStation;
+					Webradio_Set(STATION, Webradio_Get(NEWS_SAVE_STATION));
 
-					/* Enter_play mode */
-					pWebRadio->u08MenueState = MENUE_CHANGE_STATION;
-					pWebRadio->u08InitStation = 1;
-					pWebRadio->u08MenueInit = 1;
+					if(!(Webradio_Get(STATION) == Webradio_Get(NEWS_STATION)))
+					{
+						/* switch to new station */
+						Menue_ChangeMenue(MENUE_CHANGE_STATION);
+					}
 				}
 			}
 		}
@@ -340,44 +307,36 @@ void Menue_Play(WEBRADIO *pWebRadio)
 *   M E N U E   C H A N G E   S T A T I O N
 *************************************************************************/
 
-void Menue_ChangeStation(WEBRADIO *pWebRadio)
+void Menue_ChangeStation(void)
 {
 	int iResult;
-	static int iTimeCount = 25;
-	static INT_U8 u08Sequenz = 0;
+	static INT_U8 u08Sequenz = 0, u08TimeCount = 25;
 
 	DIRECTORY_CONTENTS DirEntries;
 
 	char cText[128];
 
-	/* init new menue screen */
-	if(pWebRadio->u08MenueInit)
+	/* init new menue screen and wait 5 seconds for new station */
+	if(Menue_Init(1200))
 	{
-		/* Clear Screen  and switch backlight on */
-		HD44780_Clear();
-		HD44780_Backlight(1);
 		HD44780_PrintStringXY("  connect station", 1, 0);
 
 		u08Sequenz = 0;
 
-		/* set timeout of start value */
-		pWebRadio->u08MenueInit = 0;
-		pWebRadio->u16Timeout = 1000;
+		/* save old channel */
+		Webradio_SaveStation();
 
-		if(Directory_ReadEntrie((int)pWebRadio->u08Station, &DirEntries) == 1)
+		if(Directory_ReadEntrie((int)Webradio_Get(STATION), &DirEntries) == 1)
 		{
-			DB_PRINTF(("Directory_ReadEntrie\n"));
 			/* load current stations name */
 			if(DirEntries.iType == DIR_TYPE_MCU)
 			{
 				int iLoop = 0;
 				char cEscapeStation[256];
-				char* pText = pWebRadio->cStation;
-
-				DB_PRINTF(("DirEntries.iType\n"));
+				char* pText = cText;
 
 				/* copy station name */
-				strcpy(pWebRadio->cStation, DirEntries.cName);
+				strcpy(cText, DirEntries.cName);
 
 				memset(cEscapeStation, 0x00 , sizeof(cEscapeStation));
 
@@ -399,60 +358,42 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 				}
 
 				cEscapeStation[iLoop] = 0;
-				DB_PRINTF(("cEscapeStation\n"));
 
-				if(pWebRadio->u08InitStation)
-				{
-					pWebRadio->u08InitStation = 0;
-
-					/* play station with mplayer */
-					sprintf(cText,"loadlist %s/Station/%s.m3u\n",pWebRadio->cFullPath, cEscapeStation);
-					Mplayer_PlayFile(cText);
-					DB_PRINTF(("Mplayer_PlayFile\n"));
-				}
+				/* play station with mplayer */
+				sprintf(cText,"loadlist %s/Station/%s.m3u\n",Webradio_GetPath(), cEscapeStation);
+				Mplayer_PlayFile(cText);
 			}
 		}
 	}
 
-	if(iTimeCount)
+	if(u08TimeCount)
 	{
-		iTimeCount--;
+		u08TimeCount--;
 	}
 	else
 	{
-		iTimeCount = 25;
-
-		if(pWebRadio->u16Timeout > 1)
-		{
-			pWebRadio->u16Timeout--;
-		}
-		else
-		{
-			if(pWebRadio->u16Timeout)
-			{
-				pWebRadio->u16Timeout--;
-
-				/* Clear Screen  and switch backlight on */
-				HD44780_Clear();
-				HD44780_PrintStringXY("      station       ", 1, 0);
-				HD44780_PrintStringXY("   not available    ", 2, 0);
-			}
-		}
-
-		DB_PRINTF(("Mplayer_GetStreamInfo befor\n"));
+		u08TimeCount = 25;
 
 		/* get stream info and clear info when new info receive */
-		iResult = Mplayer_GetStreamInfo(pWebRadio->cStreamInfo, sizeof(pWebRadio->cStreamInfo));
-
-		DB_PRINTF(("Mplayer_GetStreamInfo\n"));
+		iResult = Mplayer_GetStreamInfo(cText, sizeof(cText));
 
 		if(iResult == 1)
 		{
-			pWebRadio->u08MenueState = MENUE_PLAY;
-			pWebRadio->u08MenueInit = 1;
-		}
+			/* copy new stream info */
+			strcpy(Webradio_GetStreamInfo(0), cText);
 
-		if(pWebRadio->u16Timeout)
+			/* read current station name */
+			if(Directory_ReadEntrie(Webradio_Get(STATION), &DirEntries) == 1)
+ 			{
+ 				strcpy(Webradio_GetStation(0), DirEntries.cName);
+ 			}
+
+ 			Mplayer_Volume(Webradio_Get(VOLUME) * 3);
+
+			/* and go into play menue */
+			Menue_ChangeMenue(MENUE_PLAY);
+		}
+		else
 		{
 			switch (u08Sequenz++)
 			{
@@ -461,35 +402,35 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 				break;
 
 				case 1:
-					 HD44780_PrintStringXY("     *       ", 2, 0);
+					 HD44780_PrintStringXY("     *        ", 2, 0);
 				break;
 
 				case 2:
-					 HD44780_PrintStringXY("      *       ", 2, 0);
+					 HD44780_PrintStringXY("      *        ", 2, 0);
 				break;
 
 				case 3:
-					 HD44780_PrintStringXY("       *      ", 2, 0);
+					 HD44780_PrintStringXY("       *       ", 2, 0);
 				break;
 
 				case 4:
-					 HD44780_PrintStringXY("        *     ", 2, 0);
+					 HD44780_PrintStringXY("        *      ", 2, 0);
 				break;
 
 				case 5:
-					 HD44780_PrintStringXY("         *   ", 2, 0);
+					 HD44780_PrintStringXY("         *    ", 2, 0);
 				break;
 
 				case 6:
-					 HD44780_PrintStringXY("          *   ", 2, 0);
+					 HD44780_PrintStringXY("          *    ", 2, 0);
 				break;
 
 				case 7:
-					 HD44780_PrintStringXY("           *  ", 2, 0);
+					 HD44780_PrintStringXY("           *   ", 2, 0);
 				break;
 
 				case 8:
-					 HD44780_PrintStringXY("            * ", 2, 0);
+					 HD44780_PrintStringXY("            *  ", 2, 0);
 				break;
 
 				case 9:
@@ -503,90 +444,67 @@ void Menue_ChangeStation(WEBRADIO *pWebRadio)
 		}
 	}
 
-	/* decrement menue timeout */
-	if(pWebRadio->u16Timeout)
+	/* check menue timeout */
+	if(Menue_CheckTimeout())
 	{
-		pWebRadio->u16Timeout--;
-	}
-	else
-	{
-		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_PLAY;
-		pWebRadio->u08MenueInit = 1;
-	}
+		/* Clear Screen */
+		HD44780_Clear();
+		HD44780_PrintStringXY("      station       ", 1, 0);
+		HD44780_PrintStringXY("   not available    ", 2, 0);
 
-	if(Message_Read() == MESSAGE_KEY_MIDDLE)
-	{
-		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_STATION;
-		pWebRadio->u08MenueInit = 1;
-	}
+		sleep(2);
 
-	if(Message_Read() == MESSAGE_KEY_SETUP)
-	{
+		/* no change get old channel */
+		Webradio_LoadStation();
+
 		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_SETUP;
-		pWebRadio->u08MenueInit = 1;
+		Menue_ChangeMenue(MENUE_PLAY);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_RIGHT)
 	{
-		if(pWebRadio->u08Volume < 29) pWebRadio->u08Volume++;
-
-		Mplayer_Volume(pWebRadio->u08Volume * 3);
+		Mplayer_Volume(Webradio_Plus(VOLUME) * 3);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
-		if(pWebRadio->u08Volume > 0) pWebRadio->u08Volume--;
-
-		Mplayer_Volume(pWebRadio->u08Volume * 3);
+		Mplayer_Volume(Webradio_Minus(VOLUME) * 3);
 	}
 
-	/* was there some actions */
-	if(Message_Read())
+	if(Message_Read() == MESSAGE_KEY_MIDDLE)
 	{
-		/* set timeout of start value */
-		pWebRadio->u16Timeout = 200;
-		pWebRadio->u16BacklightTimeout = 2000;
-		HD44780_Backlight(1);
+		/* switch to new station */
+		Menue_ChangeMenue(MENUE_STATION);
 	}
 }
 
 /*************************************************************************
 *   M E N U E   S T A T I O N
 *************************************************************************/
-void Menue_Station(WEBRADIO *pWebRadio)
+void Menue_Station(void)
 {
 	static INT_U8 u08Position = 0, u08OldStation = 1;
+	char cText[128];
 
 	/* init new menue screen */
-	if(pWebRadio->u08MenueInit)
+	if(Menue_Init(800))
 	{
-		/* Clear Screen  and switch backlight on */
-		HD44780_Clear();
-		HD44780_Backlight(1);
-
 		/* send message to refresh the display */
 		Message_Set(MESSAGE_REFRESH_SCREEN);
 
 		/* save old channel */
-		pWebRadio->u08OldStation = pWebRadio->u08Station;
-
-		/* set timeout of start value */
-		pWebRadio->u08MenueInit = 0;
-		pWebRadio->u16Timeout = 800;
+		Webradio_SaveStation();
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
-		if((u08Position < 3) && (u08Position < pWebRadio->u08MaxChannel))
+		if((u08Position < 3) && (u08Position < Webradio_Get(MAX_STATION)))
 		{
 			u08Position++;
 		}
 		else
 		{
-			if((u08OldStation + u08Position) < pWebRadio->u08MaxChannel) u08OldStation++;
+			if((u08OldStation + u08Position) < Webradio_Get(MAX_STATION)) u08OldStation++;
 		}
 	}
 
@@ -604,30 +522,28 @@ void Menue_Station(WEBRADIO *pWebRadio)
 
 	if(Message_Read() == MESSAGE_KEY_MIDDLE)
 	{
-		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_CHANGE_STATION;
-      pWebRadio->u08MenueInit = 1;
-
 		/* get current channel */
-		if(!(pWebRadio->u08Station == u08OldStation + u08Position))
+		if(!(Webradio_Get(STATION) == u08OldStation + u08Position))
 		{
-          pWebRadio->u08InitStation = 1;
+			Webradio_Set(STATION, (u08OldStation + u08Position));
+			Webradio_Set(NEWS_SAVE_STATION, (u08OldStation + u08Position));
+			/* switch to new station */
+			Menue_ChangeMenue(MENUE_CHANGE_STATION);
 		}
-
-		pWebRadio->u08Station = u08OldStation + u08Position;
+		else
+		{
+			/* don't switch got to play */
+			Menue_ChangeMenue(MENUE_PLAY);
+		}
 	}
 
-   if(pWebRadio->u16Timeout == 0)
+   if(Menue_CheckTimeout())
 	{
-		/* no changel get old channel */
-		pWebRadio->u08Station = pWebRadio->u08OldStation;
+		/* no change get old channel */
+		Webradio_LoadStation();
 		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_CHANGE_STATION;
-		pWebRadio->u08MenueInit = 1;
+		Menue_ChangeMenue(MENUE_PLAY);
 	}
-
-	/* decrement menue timeout */
-	if(pWebRadio->u16Timeout)	pWebRadio->u16Timeout--;
 
 	/* was there some actions */
 	if(Message_Read())
@@ -642,11 +558,10 @@ void Menue_Station(WEBRADIO *pWebRadio)
 
 			if(Directory_ReadEntrie(u08OldStation + u08Loop, &DirEntries) == 1)
 			{
-				memcpy(&pWebRadio->cStation, DirEntries.cName, 19);
-				pWebRadio->cStation[19] = 0;
-				u08Length = (19 - (INT_U8) strlen(pWebRadio->cStation));
+				memcpy(cText, DirEntries.cName, 19);
+				u08Length = (19 - (INT_U8) strlen(cText));
 
-  				HD44780_PrintStringXY(pWebRadio->cStation, u08Loop, 1);
+  				HD44780_PrintStringXY(cText, u08Loop, 1);
 
 				while(u08Length--)
 				{
@@ -660,9 +575,7 @@ void Menue_Station(WEBRADIO *pWebRadio)
 		}
 
 		/* set timeout of start value */
-		pWebRadio->u16Timeout = 800;
-		pWebRadio->u16BacklightTimeout = 2000;
-		HD44780_Backlight(1);
+		Menue_SetTimeout(800);
 	}
 }
 

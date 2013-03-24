@@ -21,17 +21,13 @@
 #include "mytypes.h"
 #include "debug.h"
 
-#include "Station.h"
-#include "gpio.h"
 #include "message.h"
-#include "Network.h"
 #include "Menue.h"
 #include "Menue_OnOff.h"
 #include "Menue_Play.h"
 #include "Mplayer.h"
-#include "Settings.h"
 #include "Directory.h"
-#include "amixer.h"
+#include "Webradio.h"
 
 #include "HD44780.h"
 
@@ -50,28 +46,107 @@
 *   G L O B A L
 *************************************************************************/
 
+/* Menue Timer */
+static INT_U16  u16TimeoutTime;
+/* Webradio setting */
+static INT_U8   u08MenueState;
+/* Signal a new menue is select */
+static INT_U8   u08MenueInit;
+
+/************************************************************************
+*/
+/*! \fn int Menue_CheckTimeout(void);
+*
+*   \brief decrement timeout and check if an timeout occurre
+*
+*************************************************************************/
+int Menue_CheckTimeout(void)
+{
+	if(u16TimeoutTime)
+	{
+		u16TimeoutTime--;
+		return 0;
+	}
+
+	return 1;
+}
+
+/************************************************************************
+*/
+/*! \fn void Menue_SetTimeout(INT_U16 u16Timeout);
+*
+*   \brief set timeout
+*
+*************************************************************************/
+void Menue_SetTimeout(INT_U16 u16Timeout)
+{
+   u16TimeoutTime = u16Timeout;
+}
+
+/************************************************************************
+*/
+/*! \fn void Menue_ChangeMenue(INT_U8 u08Menue);
+*
+*   \brief set new menue state
+*
+*************************************************************************/
+void Menue_ChangeMenue(INT_U8 u08Menue)
+{
+	/* new menue and signal init */
+	u08MenueState = u08Menue;
+	u08MenueInit = 1;
+}
+
+
+/************************************************************************
+*/
+/*! \fn INT_U8 Menue_GetMenue(void)
+*
+*   \brief get current menue state
+*
+*************************************************************************/
+INT_U8 Menue_GetMenue(void)
+{
+	return u08MenueState;
+}
+
+/************************************************************************
+*/
+/*! \fn int Menue_Init(INT_U16 u16Timeout);
+*
+*   \brief set new menue
+*
+*   \return 1 = initialization done, 0 = no initialization
+*
+*************************************************************************/
+int Menue_Init(INT_U16 u16Timeout)
+{
+	/* check if a new menue is select */
+	if(u08MenueInit == 1)
+	{
+		u08MenueInit = 0;
+		u16TimeoutTime = u16Timeout;
+
+		/* Clear Screen  and switch backlight on */
+		HD44780_Clear();
+		return 1;
+	}
+
+	return 0;
+}
+
 /*************************************************************************
 *   M E N U E   S E T U P
 *************************************************************************/
-void Menue_Setup(WEBRADIO *pWebRadio)
+void Menue_Setup(void)
 {
 	static INT_U8 u08Position = 0;
 
 	/* init new menue screen */
-	if(pWebRadio->u08MenueInit)
+	if(Menue_Init(800))
 	{
-		/* Clear Screen  and switch backlight on */
-		HD44780_Clear();
-		HD44780_Backlight(1);
-
 		/* send message to refresh the display */
 		Message_Set(MESSAGE_REFRESH_SCREEN);
-
-		/* set timeout of start value */
-		pWebRadio->u08MenueInit = 0;
-		pWebRadio->u16BacklightTimeout = 2000;
-		pWebRadio->u16Timeout = 800;
-
 		u08Position = 0;
 	}
 
@@ -94,8 +169,7 @@ void Menue_Setup(WEBRADIO *pWebRadio)
 	    {
             case 0:
                 /* Quit webradio */
-                pWebRadio->u08MenueState = MENUE_OFF;
-                pWebRadio->u08MenueInit = 1;
+                Menue_ChangeMenue(MENUE_OFF);
             break;
 
             default:
@@ -109,20 +183,12 @@ void Menue_Setup(WEBRADIO *pWebRadio)
 	    {
             case 1:
                 /* News station setup */
-                pWebRadio->u08MenueState = MENUE_NEWSSTATION_SET_STATION;
-                pWebRadio->u08MenueInit = 1;
-            break;
-
-            case 2:
-                /* Wlan Settings */
-                pWebRadio->u08MenueState = MENUE_NET_SETUP;
-                pWebRadio->u08MenueInit = 1;
+                Menue_ChangeMenue(MENUE_NEWSSTATION_SET_TIME);
             break;
 
             case 3:
                 /* Ethernet Settings */
-                pWebRadio->u08MenueState = MENUE_PLAY;
-                pWebRadio->u08MenueInit = 1;
+                Menue_ChangeMenue(MENUE_PLAY);
             break;
 
             default:
@@ -130,15 +196,11 @@ void Menue_Setup(WEBRADIO *pWebRadio)
 	    }
 	}
 
-    if(pWebRadio->u16Timeout == 0)
+	if(Menue_CheckTimeout())
 	{
 		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_PLAY;
-		pWebRadio->u08MenueInit = 1;
+      Menue_ChangeMenue(MENUE_PLAY);
 	}
-
-	/* decrement menue timeout */
-	if(pWebRadio->u16Timeout)	pWebRadio->u16Timeout--;
 
 	/* was there some actions */
 	if(Message_Read())
@@ -156,10 +218,8 @@ void Menue_Setup(WEBRADIO *pWebRadio)
 			else  HD44780_PrintStringXY(" ", u08Loop, 0);
 		}
 
-		/* set timeout of start value */
-		pWebRadio->u16Timeout = 800;
-		pWebRadio->u16BacklightTimeout = 2000;
-		HD44780_Backlight(1);
+		/* set timeout */
+		Menue_SetTimeout(800);
 	}
 }
 
@@ -167,31 +227,27 @@ void Menue_Setup(WEBRADIO *pWebRadio)
 *   N E W S   S T A T I O N   S E T   S T A T I O N
 *************************************************************************/
 
-void Menue_NewsStation_SetStation(WEBRADIO *pWebRadio)
+void Menue_NewsStation_SetStation(void)
 {
 	static INT_U8 u08Position = 1, u08OldStation = 1;
+	char cText[128];
 
 	/* init new menue screen */
-	if(pWebRadio->u08MenueInit)
+	if(Menue_Init(800))
 	{
-		/* set timeout of start value */
-		pWebRadio->u08MenueInit = 0;
-
-		/* Clear Screen  and switch backlight on */
-		HD44780_Clear();
 		/* send message to refresh the display */
 		Message_Set(MESSAGE_REFRESH_SCREEN);
 	}
 
 	if(Message_Read() == MESSAGE_KEY_LEFT)
 	{
-		if((u08Position < 3) && (u08Position < pWebRadio->u08MaxChannel))
+		if((u08Position < 3) && (u08Position < Webradio_Get(MAX_STATION)))
 		{
 			u08Position++;
 		}
 		else
 		{
-			if((u08OldStation + u08Position) < pWebRadio->u08MaxChannel) u08OldStation++;
+			if((u08OldStation + u08Position) < Webradio_Get(MAX_STATION)) u08OldStation++;
 		}
 	}
 
@@ -209,22 +265,37 @@ void Menue_NewsStation_SetStation(WEBRADIO *pWebRadio)
 
 	if(Message_Read() == MESSAGE_KEY_MIDDLE)
 	{
-		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_NEWSSTATION_SET_TIME;
-      pWebRadio->u08MenueInit = 1;
+		int iResult;
 
-		pWebRadio->u08NewsStatio = u08OldStation + u08Position;
+		/* Enter_play mode */
+		Menue_ChangeMenue(MENUE_PLAY);
+
+		Webradio_Set(NEWS_STATION, (u08OldStation + u08Position));
+
+		/* add settings to path */
+		sprintf(cText, "%s%s", "/WebRadio", SETTINGS_PATH);
+		/* save the Webradio settings */
+		iResult = Webradio_WriteSettings(cText);
+		if(iResult < 0)
+		{
+			DB_PRINTF(("Settings write error\r\n"));
+		}
+
+		/* Clear Screen */
+		HD44780_Clear();
+		HD44780_PrintStringXY("    save station    ", 1, 0);
+
+		sleep(2);
+
+		/* Enter_setup mode */
+		Menue_ChangeMenue(MENUE_PLAY);
 	}
 
-   if(pWebRadio->u16Timeout == 0)
+   if(Menue_CheckTimeout())
 	{
 		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_PLAY;
-		pWebRadio->u08MenueInit = 1;
+		Menue_ChangeMenue(MENUE_PLAY);
 	}
-
-	/* decrement menue timeout */
-	if(pWebRadio->u16Timeout)	pWebRadio->u16Timeout--;
 
 	/* was there some actions */
 	if(Message_Read())
@@ -238,14 +309,13 @@ void Menue_NewsStation_SetStation(WEBRADIO *pWebRadio)
 			if(u08Position == u08Loop) HD44780_PrintStringXY(">", u08Loop, 0);
 			else  HD44780_PrintStringXY(" ", u08Loop, 0);
 
-
 			if(Directory_ReadEntrie(u08OldStation + u08Loop, &DirEntries) == 1)
 			{
-				memcpy(&pWebRadio->cStation, DirEntries.cName, 19);
-				pWebRadio->cStation[19] = 0;
-				u08Length = (19 - (INT_U8) strlen(pWebRadio->cStation));
+				memcpy(cText, DirEntries.cName, 19);
+				cText[19] = 0;
+				u08Length = (19 - (INT_U8) strlen(cText));
 
-  				HD44780_PrintStringXY(pWebRadio->cStation, u08Loop, 1);
+  				HD44780_PrintStringXY(cText, u08Loop, 1);
 
 				while(u08Length--)
 				{
@@ -258,34 +328,23 @@ void Menue_NewsStation_SetStation(WEBRADIO *pWebRadio)
 			}
 		}
 
-		/* set timeout of start value */
-		pWebRadio->u16Timeout = 800;
-		pWebRadio->u16BacklightTimeout = 2000;
-		HD44780_Backlight(1);
+		/* set timeout */
+		Menue_SetTimeout(800);
 	}
 }
 
 /*************************************************************************
 *   N E W S   S T A T I O N   S E T   T I M E
 *************************************************************************/
-void Menue_NewsStation_SetTime(WEBRADIO *pWebRadio)
+void Menue_NewsStation_SetTime(void)
 {
-	#define NEWS_STATION_OFF 0xff
 	int iResult;
 	static INT_U8 u08Position = 1;
-	char cText[32];
-
-	char cFullPath[256];
+	char cText[256];
 
 	/* init new menue screen */
-	if(pWebRadio->u08MenueInit)
+	if(Menue_Init(800))
 	{
-		/* set timeout of start value */
-		pWebRadio->u08MenueInit = 0;
-
-		/* Clear Screen and switch backlight on */
-		HD44780_Clear();
-
 		/* send message to refresh the display */
 		Message_Set(MESSAGE_REFRESH_SCREEN);
 	}
@@ -296,28 +355,19 @@ void Menue_NewsStation_SetTime(WEBRADIO *pWebRadio)
 		{
 			case 1:
 			{
-				if((pWebRadio->u08NewsStatioStartTime < 59) || (pWebRadio->u08NewsStatioStartTime == NEWS_STATION_OFF))
-				{
-					pWebRadio->u08NewsStatioStartTime += 1;
-				}
+				Webradio_Plus(START_TIME);
 			}
 			break;
 
 			case 2:
 			{
-				if(pWebRadio->u08NewsStatioIntervalTime < 30)
-				{
-					pWebRadio->u08NewsStatioIntervalTime += 5;
-				}
+				Webradio_Plus(INTERVAL_TIME);
 			}
 			break;
 
 			case 3:
 			{
-				if(pWebRadio->u08NewsStatioDurationTime < pWebRadio->u08NewsStatioIntervalTime)
-				{
-					pWebRadio->u08NewsStatioDurationTime += 1;
-				}
+				Webradio_Plus(DURATION_TIME);
 			}
 			break;
 
@@ -332,28 +382,19 @@ void Menue_NewsStation_SetTime(WEBRADIO *pWebRadio)
 		{
 			case 1:
 			{
-				if((pWebRadio->u08NewsStatioStartTime >= 0) && (!(pWebRadio->u08NewsStatioStartTime == NEWS_STATION_OFF)))
-				{
-					pWebRadio->u08NewsStatioStartTime -= 1;
-				}
+				Webradio_Minus(START_TIME);
 			}
 			break;
 
 			case 2:
 			{
-				if(pWebRadio->u08NewsStatioIntervalTime > 10)
-				{
-					pWebRadio->u08NewsStatioIntervalTime -= 5;
-				}
+				Webradio_Minus(INTERVAL_TIME);
 			}
 			break;
 
 			case 3:
 			{
-				if(pWebRadio->u08NewsStatioDurationTime > 1)
-				{
-					pWebRadio->u08NewsStatioDurationTime -= 1;
-				}
+				Webradio_Minus(DURATION_TIME);
 			}
 			break;
 
@@ -366,34 +407,44 @@ void Menue_NewsStation_SetTime(WEBRADIO *pWebRadio)
 	{
 		u08Position++;
 
-		if(u08Position == 4)
+		if((u08Position == 2) && (Webradio_Get(START_TIME) == NEWS_STATION_OFF))
 		{
 			u08Position = 1;
 
 			/* add settings to path */
-			sprintf(cFullPath, "%s%s", "/WebRadio", SETTINGS_PATH);
+			sprintf(cText, "%s%s", "/WebRadio", SETTINGS_PATH);
 			/* save the Webradio settings */
-			iResult = Settings_Write(cFullPath, pWebRadio);
+			iResult = Webradio_WriteSettings(cText);
 			if(iResult < 0)
 			{
 				DB_PRINTF(("Settings write error\r\n"));
 			}
 
-			/* Enter_play mode */
-			pWebRadio->u08MenueState = MENUE_SETUP;
-			pWebRadio->u08MenueInit = 1;
+			/* Clear Screen */
+			HD44780_Clear();
+			HD44780_PrintStringXY("    switch news    ", 1, 0);
+			HD44780_PrintStringXY("    station off    ", 2, 0);
+
+			sleep(2);
+
+			/* Enter_setup mode */
+			Menue_ChangeMenue(MENUE_PLAY);
+		}
+
+		if(u08Position == 4)
+		{
+			u08Position = 1;
+
+			/* Enter_setup mode */
+			Menue_ChangeMenue(MENUE_NEWSSTATION_SET_STATION);
 		}
 	}
 
-   if(pWebRadio->u16Timeout == 0)
+   if(Menue_CheckTimeout())
 	{
 		/* Enter_play mode */
-		pWebRadio->u08MenueState = MENUE_PLAY;
-		pWebRadio->u08MenueInit = 1;
+		Menue_ChangeMenue(MENUE_PLAY);
 	}
-
-	/* decrement menue timeout */
-	if(pWebRadio->u16Timeout)	pWebRadio->u16Timeout--;
 
 	/* was there some actions */
 	if(Message_Read())
@@ -407,76 +458,72 @@ void Menue_NewsStation_SetTime(WEBRADIO *pWebRadio)
 			else  HD44780_PrintStringXY(" ", u08Loop, 0);
 		}
 
-		if(pWebRadio->u08NewsStatioStartTime == NEWS_STATION_OFF)
+		if(Webradio_Get(START_TIME) == NEWS_STATION_OFF)
 		{
 			HD44780_PrintStringXY("News off           ", 1, 1);
 		}
 		else
 		{
-			sprintf(cText,"Start    hh:%02d",pWebRadio->u08NewsStatioStartTime);
+			sprintf(cText,"Start    hh:%02d", Webradio_Get(START_TIME));
 			HD44780_PrintStringXY(cText, 1, 1);
 		}
 
-		sprintf(cText,"Interval %02d min",pWebRadio->u08NewsStatioIntervalTime);
+		sprintf(cText,"Interval %02d min", Webradio_Get(INTERVAL_TIME));
 		HD44780_PrintStringXY(cText, 2, 1);
 
-		sprintf(cText,"Duration %02d min",pWebRadio->u08NewsStatioDurationTime);
+		sprintf(cText,"Duration %02d min", Webradio_Get(DURATION_TIME));
 		HD44780_PrintStringXY(cText, 3, 1);
 
-		/* set timeout of start value */
-		pWebRadio->u16Timeout = 800;
-		pWebRadio->u16BacklightTimeout = 2000;
-		HD44780_Backlight(1);
+		/* set timeout */
+		Menue_SetTimeout(800);
 	}
 }
 
-void Menue_Select(WEBRADIO *pWebRadio)
+void Menue_Select(void)
 {
 	/* read last mesage and enter menue */
 	Message_Get();
 
-	switch(pWebRadio->u08MenueState)
+	switch(Menue_GetMenue())
 	{
 		case MENUE_ON:
-			Menue_On(pWebRadio);
+			Menue_On();
 		break;
 
 		case MENUE_PLAY:
-			Menue_Play(pWebRadio);
+			Menue_Play();
 		break;
 
 		case MENUE_CHANGE_STATION:
-			Menue_ChangeStation(pWebRadio);
+			Menue_ChangeStation();
 		break;
 
 		case MENUE_SETUP:
-			Menue_Setup(pWebRadio);
+			Menue_Setup();
 		break;
 
 		case MENUE_STATION:
-			Menue_Station(pWebRadio);
+			Menue_Station();
 		break;
 
 		case MENUE_NEWSSTATION_SET_STATION:
-			 Menue_NewsStation_SetStation(pWebRadio);
+			 Menue_NewsStation_SetStation();
 		break;
 
 		case MENUE_NEWSSTATION_SET_TIME:
-			 Menue_NewsStation_SetTime(pWebRadio);
+			 Menue_NewsStation_SetTime();
 		break;
 
       case MENUE_OFF:
-			Menue_Off(pWebRadio);
+			Menue_Off();
 		break;
 
 		default:
 		break;
 	}
 
-
    /* now clear all */
 	Message_Clear();
-
 }
 
 #ifdef __cplusplus
