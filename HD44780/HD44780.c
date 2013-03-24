@@ -105,8 +105,6 @@ RESULT HD44780_Init(INT_U8 u08Mode)
    return Result;
 }
 
-
-
 /***********************************************************************
 */
 /*! \fn void HD44780_WriteCommand(INT_U8 u08Command)
@@ -147,7 +145,6 @@ static void HD44780_WriteData4BitMode(INT_U8 u08Data)
    HD44780_UserInterface_SetE(1);
    HD44780_UserInterface_SetE(0);
 }
-
 
 /***********************************************************************
 */
@@ -276,7 +273,6 @@ void HD44780_PrintChar(CHAR cChar, INT_U8 u08X, INT_U8 u08Y)
 	HD44780_WriteData4BitMode(cChar);
 }
 
-
 /***********************************************************************
 */
 /*! \fn void HD44780_GotoXY(INT_U8 u08X, INT_U8 u08Y)
@@ -324,7 +320,6 @@ void HD44780_GotoXY(INT_U8 u08X, INT_U8 u08Y)
    HD44780_WriteData4BitMode(u08X);
 }
 
-
 /***********************************************************************
 */
 /*! \fn void HD44780_Clear(void)
@@ -342,9 +337,6 @@ void HD44780_Clear(void)
 
    HD44780_UserInterface_SleepMs(1);
 }
-
-
-
 
 /***********************************************************************
 */
@@ -365,7 +357,6 @@ void HD44780_Goto(INT_U8 u08Address)
 
    HD44780_WriteData4BitMode(u08Address);
 }
-
 
 /***********************************************************************
 */

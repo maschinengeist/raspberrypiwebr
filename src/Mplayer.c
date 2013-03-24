@@ -121,7 +121,7 @@ int Mplayer_Start(void)
 /************************************************************************
 */
 /*! \fn int Mplayer_GetStreamInfo(STREAM_ENTRY* pStreamEntry, int iMaxSize)
-
+*
 *   \brief get info of steam, station, titel, genre and so on
 *
 *   \return int --> -1 no info, 1 get stream info
@@ -144,15 +144,11 @@ int Mplayer_GetStreamInfo(char* cStreamInfo, int iMaxSize)
 
 	if(pResult != NULL)
 	{
-		DB_PRINTF(("Mplayer_GetStreamInfo fgets\n"));
-
 		/* if mplayer startet ? */
 		if(0 == (memcmp(cText, "ICY Info: StreamTitle='", strlen("ICY Info: StreamTitle='"))))
 		{
 			/* set all entrys to zero */
 			memset(cStreamInfo, 0x00, iMaxSize);
-
-			DB_PRINTF(("iPosition :%d\n", iPosition));
 
 			iPosition = strlen("ICY Info: StreamTitle='");
 
@@ -179,12 +175,10 @@ int Mplayer_GetStreamInfo(char* cStreamInfo, int iMaxSize)
 	return -1;
 }
 
-
-
 /************************************************************************
 */
 /*! \fn void Mplayer_ReadStreamInfo(STREAM_ENTRY* pStreamEntry)
-
+*
 *   \brief get info of steam, station, titel, genre and so on
 *
 *   \return int --> -1 no info, 1 get stream info
@@ -218,7 +212,7 @@ int Mplayer_Volume(INT_U8 u08Volume)
 /************************************************************************
 */
 /*! \fn int Mplayer_PlayCommand(int iCommand)
-
+*
 *   \brief send play command like volume play paus to the mplayer
 *
 *   \return int --> -1 command not availabel, 1 execute command
@@ -267,7 +261,7 @@ int Mplayer_PlayCommand(int iCommand)
 /************************************************************************
 */
 /*! \fn int Mplayer_PlayFile(char* cFile)
-
+*
 *   \brief play an file or url
 *
 *   \return int --> -1 play error, 1 mplayer is playing
@@ -282,7 +276,7 @@ int Mplayer_PlayFile(char* cFile)
 /************************************************************************
 */
 /*! \fn int Mplayer_Close(void)
-
+*
 *   \brief stop play and leave mplayer
 *
 *   \return int --> -1 play error, 1 mplayer is closed

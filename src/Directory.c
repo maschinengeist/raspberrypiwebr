@@ -29,14 +29,11 @@
 *   G L O B A L
 *************************************************************************/
 
-
-
 static char cFilterMp3[] = ".mp3";
 static char cFilterM3U[] = ".m3u";
 static char cFilterPls[] = ".pls";
 
 static int iMaxEntries = 0;
-
 
 static DIRECTORY_CONTENTS iDirEntries[MAX_ENTRIES];
 
@@ -53,7 +50,7 @@ DIRECTORY_FILTER FilterList[] = {{cFilterMp3, DIR_TYPE_MP3}, {cFilterM3U, DIR_TY
 /************************************************************************
 */
 /*! \fn int Directory_Open(char *cPath)
-
+*
 *   \brief open an directory and read all entries specified by filters
 *
 *   \param cPath --> path to directory
@@ -156,7 +153,7 @@ int Directory_Open(char *cDir)
 /************************************************************************
 */
 /*! \fn char* Directory_ReadEntrie(int iEntrie)
-
+*
 *   \brief read entrie
 *
 *   \param iEntrie --> number to read
@@ -180,7 +177,7 @@ int Directory_ReadEntrie(int iEntrie, DIRECTORY_CONTENTS* pDirEntries)
 /************************************************************************
 */
 /*! \fn int Directory_MaxEntries(void)
-
+*
 *   \brief return amount of entries
 *
 *   \return int --> amount of entries
