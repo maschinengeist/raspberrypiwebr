@@ -60,19 +60,20 @@ INT_U16 u16RotarySwitch(void)
 
 	switch(ch)
 	{
-		case 54:
+	    printf("%d\n", ch);
+		case 67:
 			u16CurrentState |= 0x0001;
 		break;
 
-		case 52:
+		case 68:
 			u16CurrentState |= 0x0002;
 		break;
 
-		case 53:
+		case 69:
 			u16CurrentState |= 0x0004;
 		break;
 
-		case 10:
+		case 65:
 			u16CurrentState |= 0x0008;
 		break;
 
@@ -231,15 +232,14 @@ void *MessageThread(void *arg)
 #if 1
 /************************************************************************
 */
-/*! \fn INT_U8 Message_Get(void)
-
-*   \brief read rotation and state of middle pin
+/*! \fn int Message_Init(void)
 *
-*   \return INT_U08 --> 0x00 = no change, 0x01 = rotate right
-*   \return 0x02 = rotate left, 0x80 = swicht middle
+*   \brief create thread to poll gpios
+*
+*   \return
 *
 *************************************************************************/
-int Message_Init(int iGpioRight, int iGpioLeft, int iGpioMiddle)
+int Message_Init(void)
 {
 	pthread_t ThreadID;
 
@@ -259,7 +259,7 @@ int Message_Init(int iGpioRight, int iGpioLeft, int iGpioMiddle)
 /************************************************************************
 */
 /*! \fn void Message_Get(void)
-
+*
 *   \brief read an message
 *
 *   \return int --> 0 = no Message
@@ -276,7 +276,7 @@ void Message_Get(void)
 /************************************************************************
 */
 /*! \fn int Message_Read(void)
-
+*
 *   \brief read an message
 *
 *   \return int --> 0 = no Message
@@ -291,7 +291,7 @@ int Message_Read(void)
 /************************************************************************
 */
 /*! \fn void Message_Set(int iMessage)
-
+*
 *   \brief set an message
 *
 *   \return int --> 0 = no Message

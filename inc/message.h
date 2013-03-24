@@ -26,7 +26,7 @@ enum MESSAGES
 *   D E C L A R A T I O N
 ***************************************************************************************/
 
-int Message_Init(int iGpioRight, int iGpioLeft, int iGpioMiddle);
+int Message_Init(void);
 
 void Message_Get(void);
 
