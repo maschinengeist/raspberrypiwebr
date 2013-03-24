@@ -14,8 +14,6 @@
 *   D E C L A R A T I O N
 *************************************************************************/
 
-int i2c_Init(CHAR* cDevice, INT_U16 u16Address, INT_U8* p08Data, INT_U16 u16Size);
-
 int i2c_Read(CHAR* cDevice, INT_U16 u16Address, INT_U8* p08Data, INT_U16 u16Size);
 
 int i2c_Write(CHAR* cDevice, INT_U16 u16Address, INT_U8* p08Data, INT_U16 u16Size);

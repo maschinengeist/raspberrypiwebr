@@ -28,23 +28,6 @@
 
 /***********************************************************************
  */
-/*! \fn int i2c_Init(CHAR* cDevice, u08Address, p08Data)
- *
- *   \brief Init an gpio
- *
- *   \param u08GpioPin --> the gpio nummber to init
- *   \param u08Direction --> the gpio direction, can be GPIO_DIRECTION_IN or GPIO_DIRECTION_OUT
- *
- *   \return int --> 1 = gpio is now available or -1 = th gpio is not available for the user
- *
- *************************************************************************/
-int i2c_Init(CHAR* cDevice, INT_U16 u16Address, INT_U8* p08Data, INT_U16 u16Size)
-{
-   return -1;
-}
-
-/***********************************************************************
- */
 /*! \fn int i2c_Write(CHAR* cDevice, INT_U16 u16Address, INT_U8* p08Data, INT_U16 u16Size)
  *
  *   \brief Write to the i2c port
