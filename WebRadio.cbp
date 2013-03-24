@@ -10,7 +10,7 @@
 				<Option output="bin/Debug/WebRadio" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="bcm2708_gnu_gcc_compiler" />
+				<Option compiler="bcm_2708" />
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-pg" />
@@ -24,7 +24,7 @@
 				<Option output="bin/Release/WebRadio" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
-				<Option compiler="bcm2708_gnu_gcc_compiler" />
+				<Option compiler="bcm_2708" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-Wall" />
@@ -42,10 +42,6 @@
 					<Add option="-g" />
 					<Add option="-D_DEBUG=1" />
 					<Add option="-DSIMULANT=1" />
-					<Add directory="inc" />
-					<Add directory="incprj" />
-					<Add directory="gpio" />
-					<Add directory="GU140x32" />
 				</Compiler>
 				<Linker>
 					<Add option="-pthread" />
@@ -136,10 +132,7 @@
 		<Unit filename="src/Mplayer.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/Settings.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Station.c">
+		<Unit filename="src/Webradio.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/debug.c">
