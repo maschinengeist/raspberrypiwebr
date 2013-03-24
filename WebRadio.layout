@@ -25,11 +25,11 @@
 	<File name="gpio/gpio.h" open="0" top="0" tabpos="5">
 		<Cursor position="356" topLine="16" />
 	</File>
-	<File name="i2c/i2c.c" open="0" top="0" tabpos="2">
-		<Cursor position="328" topLine="0" />
+	<File name="i2c/i2c.c" open="1" top="0" tabpos="8">
+		<Cursor position="1242" topLine="72" />
 	</File>
-	<File name="i2c/i2c.h" open="0" top="0" tabpos="6">
-		<Cursor position="617" topLine="0" />
+	<File name="i2c/i2c.h" open="1" top="0" tabpos="9">
+		<Cursor position="529" topLine="6" />
 	</File>
 	<File name="inc/GU140x32_Interface.h" open="0" top="0" tabpos="8">
 		<Cursor position="241" topLine="0" />
@@ -38,7 +38,7 @@
 		<Cursor position="275" topLine="0" />
 	</File>
 	<File name="inc/Menue.h" open="1" top="0" tabpos="4">
-		<Cursor position="1143" topLine="44" />
+		<Cursor position="485" topLine="11" />
 	</File>
 	<File name="inc/Station.h" open="0" top="0" tabpos="8">
 		<Cursor position="327" topLine="0" />
@@ -55,8 +55,8 @@
 	<File name="incprj/project.h" open="0" top="0" tabpos="10">
 		<Cursor position="294" topLine="0" />
 	</File>
-	<File name="main.cpp" open="0" top="0" tabpos="6">
-		<Cursor position="800" topLine="25" />
+	<File name="main.cpp" open="1" top="1" tabpos="11">
+		<Cursor position="799" topLine="25" />
 	</File>
 	<File name="spi/spi.h" open="0" top="0" tabpos="6">
 		<Cursor position="48" topLine="0" />
@@ -67,29 +67,23 @@
 	<File name="src/HD44780_UserInterface.c" open="0" top="0" tabpos="10">
 		<Cursor position="1465" topLine="10" />
 	</File>
-	<File name="src/Init.c" open="1" top="0" tabpos="2">
-		<Cursor position="1104" topLine="32" />
+	<File name="src/Init.c" open="1" top="0" tabpos="7">
+		<Cursor position="1104" topLine="7" />
 	</File>
-	<File name="src/Menue.c" open="1" top="1" tabpos="2">
-		<Cursor position="7622" topLine="321" />
+	<File name="src/Menue.c" open="1" top="0" tabpos="2">
+		<Cursor position="6734" topLine="288" />
 	</File>
 	<File name="src/Menue_OnOff.c" open="0" top="0" tabpos="9">
 		<Cursor position="2706" topLine="55" />
 	</File>
 	<File name="src/Menue_Play.c" open="1" top="0" tabpos="3">
-		<Cursor position="11672" topLine="510" />
+		<Cursor position="11493" topLine="279" />
 	</File>
 	<File name="src/Mplayer.c" open="0" top="0" tabpos="7">
 		<Cursor position="5348" topLine="237" />
 	</File>
-	<File name="src/Settings.c" open="1" top="0" tabpos="7">
-		<Cursor position="2511" topLine="81" />
-	</File>
-	<File name="src/Station.c" open="0" top="0" tabpos="10">
-		<Cursor position="4338" topLine="180" />
-	</File>
 	<File name="src/Webradio.c" open="1" top="0" tabpos="5">
-		<Cursor position="4171" topLine="238" />
+		<Cursor position="4346" topLine="232" />
 	</File>
 	<File name="src/debug.c" open="0" top="0" tabpos="7">
 		<Cursor position="240" topLine="27" />
