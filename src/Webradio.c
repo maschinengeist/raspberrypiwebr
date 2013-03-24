@@ -18,9 +18,6 @@
 *************************************************************************/
 
 #define MAX_VOLUME 30
-#define NETWORK_PATH "Network.conf"
-#define SETTINGS_PATH "/Settings"
-#define STATION_PATH "/Station"
 
 /*************************************************************************
 *   G L O B A L
@@ -98,7 +95,7 @@ INT_U8 Webradio_Plus(INT_U8 u08Type)
 		{
 			if(u08NewsIntervalTime < 30)
 			{
-				u08NewsIntervalTime += 2;
+				u08NewsIntervalTime += 5;
 			}
 
 			u08Value = u08NewsIntervalTime;
@@ -164,9 +161,9 @@ INT_U8 Webradio_Minus(INT_U8 u08Type)
 
 		case INTERVAL_TIME:
 		{
-			if(u08NewsIntervalTime > 2)
+			if(u08NewsIntervalTime > 10)
 			{
-				u08NewsIntervalTime -= 2;
+				u08NewsIntervalTime -= 5;
 			}
 
 			u08Value = u08NewsIntervalTime;
@@ -414,11 +411,11 @@ int Webradio_WriteSettings(char* cPath)
 
 		fprintf(fpSettings, "news station=%d\n", (int)Webradio_Get(NEWS_STATION));
 
-		fprintf(fpSettings, "news station start time=%d\n", (int)Webradio_Minus(START_TIME));
+		fprintf(fpSettings, "news station start time=%d\n", (int)Webradio_Get(START_TIME));
 
-		fprintf(fpSettings, "news station interval time=%d\n", (int)Webradio_Minus(INTERVAL_TIME));
+		fprintf(fpSettings, "news station interval time=%d\n", (int)Webradio_Get(INTERVAL_TIME));
 
-		fprintf(fpSettings, "news station duration time=%d\n", (int)Webradio_Minus(DURATION_TIME));
+		fprintf(fpSettings, "news station duration time=%d\n", (int)Webradio_Get(DURATION_TIME));
 
 		fclose(fpSettings);
 	}

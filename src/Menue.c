@@ -274,16 +274,21 @@ void Menue_NewsStation_SetStation(void)
 
 		/* add settings to path */
 		sprintf(cText, "%s%s", "/WebRadio", SETTINGS_PATH);
+
+		/* Clear Screen */
+		HD44780_Clear();
+
 		/* save the Webradio settings */
 		iResult = Webradio_WriteSettings(cText);
 		if(iResult < 0)
 		{
 			DB_PRINTF(("Settings write error\r\n"));
+			HD44780_PrintStringXY("    save error    ", 1, 0);
 		}
-
-		/* Clear Screen */
-		HD44780_Clear();
-		HD44780_PrintStringXY("    save station    ", 1, 0);
+		else
+		{
+			HD44780_PrintStringXY("    save station    ", 1, 0);
+		}
 
 		sleep(2);
 

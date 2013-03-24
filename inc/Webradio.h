@@ -13,6 +13,9 @@
 #define STREAM_INFO_LENGTH 128
 #define NEWS_STATION_OFF 0xff
 
+#define SETTINGS_PATH "/Settings"
+#define STATION_PATH "/Station"
+
 enum WEBRADIO
 {
 	VOLUME = 0,
