@@ -8,11 +8,7 @@
 
 #include "message.h"
 #include "Init.h"
-#include "Mplayer.h"
-#include "Network.h"
 #include "Menue.h"
-#include "Menue_OnOff.h"
-#include "HD44780.h"
 
 /*************************************************************************
 *   D E F I N E
@@ -23,10 +19,6 @@
 *************************************************************************/
 
 
-/* static global settings of the webradio */
-static WEBRADIO WebRadio;
-
-
 /****************************************************************
  * Main
  ****************************************************************/
@@ -34,18 +26,15 @@ static WEBRADIO WebRadio;
 int main(void)
 {
 	printf("start webradio  \r\n");
-	printf("build 07.02.2013\r\n");
+	printf("build 24.03.2013\r\n");
 
 	Init();
 
-	WebRadio.u08MenueState = MENUE_ON;
-	WebRadio.u08MenueInit = 1;
-
-	Menue_Start();
+	Menue_ChangeMenue(MENUE_ON);
 
 	do
 	{
-		Menue_Select(&WebRadio);
+		Menue_Select();
 
 		usleep(10000);
 	}
