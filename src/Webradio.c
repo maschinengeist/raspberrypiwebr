@@ -208,12 +208,6 @@ void Webradio_Set(INT_U8 u08Type, INT_U8 u08Value)
 		}
 		break;
 
-		case NEWS_SAVE_STATION:
-		{
-			u08NewsSaveStation = u08Value;
-		}
-		break;
-
 		case MAX_STATION:
 		{
 			u08MaxStations = u08Value;
@@ -223,6 +217,30 @@ void Webradio_Set(INT_U8 u08Type, INT_U8 u08Value)
 		case NEWS_STATION:
 		{
 			u08NewsStation = u08Value;
+		}
+		break;
+
+		case NEWS_SAVE_STATION:
+		{
+			u08NewsSaveStation = u08Value;
+		}
+		break;
+
+		case START_TIME:
+		{
+			u08NewsStartTime = u08Value;
+		}
+		break;
+
+		case INTERVAL_TIME:
+		{
+			u08NewsIntervalTime = u08Value;
+		}
+		break;
+
+		case DURATION_TIME:
+		{
+			u08NewsDurationTime = u08Value;
 		}
 		break;
 

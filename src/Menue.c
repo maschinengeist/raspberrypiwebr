@@ -235,6 +235,7 @@ void Menue_NewsStation_SetStation(void)
 	/* init new menue screen */
 	if(Menue_Init(800))
 	{
+		HD44780_PrintStringXY("Select News Station ", 0, 0);
 		/* send message to refresh the display */
 		Message_Set(MESSAGE_REFRESH_SCREEN);
 	}
@@ -295,46 +296,47 @@ void Menue_NewsStation_SetStation(void)
 		/* Enter_setup mode */
 		Menue_ChangeMenue(MENUE_PLAY);
 	}
+	else
+	{
+		/* was there some actions */
+		if(Message_Read())
+		{
+			INT_U8 u08Loop, u08Length;
+			DIRECTORY_CONTENTS DirEntries;
+
+			for(u08Loop = 1 ; u08Loop < 4 ; u08Loop++)
+			{
+				if(u08Position == u08Loop) HD44780_PrintStringXY(">", u08Loop, 0);
+				else  HD44780_PrintStringXY(" ", u08Loop, 0);
+
+				if(Directory_ReadEntrie(u08OldStation + u08Loop, &DirEntries) == 1)
+				{
+					memcpy(cText, DirEntries.cName, 19);
+					cText[19] = 0;
+					u08Length = (19 - (INT_U8) strlen(cText));
+
+					HD44780_PrintStringXY(cText, u08Loop, 1);
+
+					while(u08Length--)
+					{
+						HD44780_PrintString(" ");
+					}
+				}
+				else
+				{
+					HD44780_PrintStringXY("                   ", u08Loop, 1);
+				}
+			}
+
+			/* set timeout */
+			Menue_SetTimeout(800);
+		}
+	}
 
    if(Menue_CheckTimeout())
 	{
 		/* Enter_play mode */
 		Menue_ChangeMenue(MENUE_PLAY);
-	}
-
-	/* was there some actions */
-	if(Message_Read())
-	{
-		INT_U8 u08Loop, u08Length;
-		DIRECTORY_CONTENTS DirEntries;
-		HD44780_PrintStringXY("Select News Station ", 0, 0);
-
-		for(u08Loop = 1 ; u08Loop < 4 ; u08Loop++)
-		{
-			if(u08Position == u08Loop) HD44780_PrintStringXY(">", u08Loop, 0);
-			else  HD44780_PrintStringXY(" ", u08Loop, 0);
-
-			if(Directory_ReadEntrie(u08OldStation + u08Loop, &DirEntries) == 1)
-			{
-				memcpy(cText, DirEntries.cName, 19);
-				cText[19] = 0;
-				u08Length = (19 - (INT_U8) strlen(cText));
-
-  				HD44780_PrintStringXY(cText, u08Loop, 1);
-
-				while(u08Length--)
-				{
-					HD44780_PrintString(" ");
-				}
-			}
-			else
-			{
-				HD44780_PrintStringXY("                   ", u08Loop, 1);
-			}
-		}
-
-		/* set timeout */
-		Menue_SetTimeout(800);
 	}
 }
 
