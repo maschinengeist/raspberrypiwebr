@@ -35,6 +35,9 @@
 *   D E F I N E
 *************************************************************************/
 
+/* the offset for your country */
+#define COUNTRY_TIME_OFFSET 1
+
 /*************************************************************************
 *   G L O B A L
 *************************************************************************/
@@ -62,7 +65,7 @@ void Menue_Play(void)
 
 	/* get time */
 	time (&rawtime);
-	timeinfo = localtime(&rawtime);
+	timeinfo = gmtime(&rawtime);
 
 	/* init new menue screen */
 	if(Menue_Init(0))
@@ -223,13 +226,16 @@ void Menue_Play(void)
 
 			cCurrentSong[MAX_SONG_LENGTH - 1] = 0;
 
+			/* winter or summertime */
 			if(timeinfo->tm_isdst > 0)
 			{
-				sprintf(cText, " %02d:%02d", (timeinfo->tm_hour), timeinfo->tm_min);
+				/* wintertime */
+				sprintf(cText, " %02d:%02d", (timeinfo->tm_hour + COUNTRY_TIME_OFFSET)%24, timeinfo->tm_min);
 			}
 			else
 			{
-				sprintf(cText, " %02d:%02d", (timeinfo->tm_hour + 1)%24, timeinfo->tm_min);
+				/* summertime plus one hour */
+				sprintf(cText, " %02d:%02d", (timeinfo->tm_hour + COUNTRY_TIME_OFFSET + 1)%24, timeinfo->tm_min);
 			}
 
 			HD44780_PrintStringXY(cText, 0, 14);

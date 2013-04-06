@@ -26,7 +26,7 @@
 int main(void)
 {
 	printf("start webradio  \r\n");
-	printf("build 24.03.2013\r\n");
+	printf("build 06.04.2013\r\n");
 
 	Init();
 

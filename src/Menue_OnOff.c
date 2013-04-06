@@ -127,7 +127,7 @@ void Menue_Off(void)
 	if(Menue_Init(200))
 	{
 		HD44780_Backlight(1);
-		HD44780_PrintStringXY("   exit webradio", 1, 0);
+		HD44780_PrintStringXY("      goodbye      ", 1, 0);
 
 		 while(iTimeout--)
 		 {
