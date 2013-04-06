@@ -223,7 +223,15 @@ void Menue_Play(void)
 
 			cCurrentSong[MAX_SONG_LENGTH - 1] = 0;
 
-			sprintf(cText, " %02d:%02d", (timeinfo->tm_hour+1)%24, timeinfo->tm_min);
+			if(timeinfo->tm_isdst > 0)
+			{
+				sprintf(cText, " %02d:%02d", (timeinfo->tm_hour), timeinfo->tm_min);
+			}
+			else
+			{
+				sprintf(cText, " %02d:%02d", (timeinfo->tm_hour + 1)%24, timeinfo->tm_min);
+			}
+
 			HD44780_PrintStringXY(cText, 0, 14);
 		}
  	}
