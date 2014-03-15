@@ -129,57 +129,26 @@ void Menue_Off(void)
 		HD44780_Backlight(1);
 		HD44780_PrintStringXY("      goodbye      ", 1, 0);
 
-		 while(iTimeout--)
-		 {
-			  switch (u08Sequenz++)
-			  {
-					case 0:
-						 HD44780_PrintStringXY("    *         ", 2, 0);
-					break;
+		while(iTimeout--)
+		{
+			switch (u08Sequenz++)
+			{
+				case 0: HD44780_PrintStringXY("    *         ", 2, 0); break;
+				case 1: HD44780_PrintStringXY("     *        ", 2, 0); break;
+				case 2: HD44780_PrintStringXY("      *       ", 2, 0); break;
+				case 3: HD44780_PrintStringXY("       *      ", 2, 0); break;
+				case 4: HD44780_PrintStringXY("        *     ", 2, 0); break;
+				case 5: HD44780_PrintStringXY("         *    ", 2, 0); break;
+				case 6: HD44780_PrintStringXY("          *   ", 2, 0); break;
+				case 7: HD44780_PrintStringXY("           *  ", 2, 0); break;
+				case 8: HD44780_PrintStringXY("            * ", 2, 0); break;
+				case 9: HD44780_PrintStringXY("             *", 2, 0); u08Sequenz = 0; break;
+				default:
+				break;
+			}
 
-					case 1:
-						 HD44780_PrintStringXY("     *       ", 2, 0);
-					break;
-
-					case 2:
-						 HD44780_PrintStringXY("      *       ", 2, 0);
-					break;
-
-					case 3:
-						 HD44780_PrintStringXY("       *      ", 2, 0);
-					break;
-
-					case 4:
-						 HD44780_PrintStringXY("        *     ", 2, 0);
-					break;
-
-					case 5:
-						 HD44780_PrintStringXY("         *   ", 2, 0);
-					break;
-
-					case 6:
-						 HD44780_PrintStringXY("          *   ", 2, 0);
-					break;
-
-					case 7:
-						 HD44780_PrintStringXY("           *  ", 2, 0);
-					break;
-
-					case 8:
-						 HD44780_PrintStringXY("            * ", 2, 0);
-					break;
-
-					case 9:
-						 HD44780_PrintStringXY("             *", 2, 0);
-						 u08Sequenz = 0;
-					break;
-
-					default:
-					break;
-			  }
-
-			  usleep(250000);
-		 }
+			usleep(250000);
+		}
 
 		/* backlight off and clear screen */
 		HD44780_Clear();
