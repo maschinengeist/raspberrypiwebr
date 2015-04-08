@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Webradio" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Webradio" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="bcm_2708" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-pg" />
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Webradio" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="bcm_2708" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Simulant">
+				<Option output="Webradio" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-D_DEBUG=1" />
+					<Add option="-DSIMULANT=1" />
+				</Compiler>
+				<Linker>
+					<Add option="-pthread" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-g" />
+			<Add option="-D_DEBUG=1" />
+			<Add directory="inc" />
+			<Add directory="incprj" />
+			<Add directory="GU140x32" />
+			<Add directory="gpio" />
+			<Add directory="HD44780" />
+			<Add directory="i2c" />
+		</Compiler>
+		<Linker>
+			<Add option="-pthread" />
+		</Linker>
+		<Unit filename="Dogm160x104/dogm160x104.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="GU140x32/GU140x32.h" />
+		<Unit filename="HD44780 Terminal/HD44780.c">
+			<Option compilerVar="CC" />
+			<Option target="Simulant" />
+		</Unit>
+		<Unit filename="HD44780 Terminal/HD44780.h" />
+		<Unit filename="HD44780/HD44780.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="HD44780/HD44780.h" />
+		<Unit filename="gpio/gpio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="gpio/gpio.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="i2c/i2c.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="i2c/i2c.h" />
+		<Unit filename="inc/GU140x32_Interface.h" />
+		<Unit filename="inc/Init.h" />
+		<Unit filename="inc/Menue.h" />
+		<Unit filename="inc/Station.h" />
+		<Unit filename="inc/debug.h" />
+		<Unit filename="inc/message.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="incprj/mytypes.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="incprj/project.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="spi/spi.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src/Directory.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/HD44780_UserInterface.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src/Init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Menue.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Menue_OnOff.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Menue_Play.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Mplayer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Webradio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/debug.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/message.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger>
+				<remote_debugging target="Debug">
+					<options conn_type="0" serial_baud="115200" ip_address="192.168.0.191" ip_port="4002" skip_ld_path="1" />
+				</remote_debugging>
+				<remote_debugging target="Simulant">
+					<options conn_type="0" serial_baud="115200" ip_address="127.0.0.1" ip_port="4002" />
+				</remote_debugging>
+			</debugger>
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,11 @@
+start volume=76
+news state=1
+news starttime=4
+news duration=2
+news interval=60
+station=Radio Paradise.m3u
+station memo1=
+station memo2=
+station memo3=
+station memo4=
+news station=HR Info.m3u

@@ -1,0 +1,212 @@
+/*************************************************************************
+*   I N C L U D E
+*************************************************************************/
+
+#include "mytypes.h"
+#include "io.h"
+
+/*************************************************************************
+*   D E F I N E
+*************************************************************************/
+
+#define GPIO_LED_TEST      PORTCbits.RC8 
+#define GPIO_LED_BACKLIGHT PORTCbits.RC6
+
+#define GPIO_EADOGM_RS     PORTBbits.RB4
+#define GPIO_EADOGM_CSB    PORTCbits.RC4
+
+#define GPIO_TASTER1       PORTBbits.RB11
+#define GPIO_TASTER2       PORTBbits.RB12
+#define GPIO_TASTER3       PORTBbits.RB13
+#define GPIO_TASTER4       PORTCbits.RC9
+#define GPIO_TASTER5       PORTBbits.RB10
+
+#define GPIO_XRESET        PORTAbits.RA8
+#define GPIO_XTEST         PORTBbits.RB2
+#define GPIO_DREQ          PORTAbits.RA3
+
+#define GPIO_XCS           PORTCbits.RC2
+#define GPIO_XDCS          PORTAbits.RA2
+
+#define GPIO_SDCARD_WP     PORTBbits.RB7
+#define GPIO_SDCARD_CS     PORTBbits.RB6
+#define GPIO_SDCARD_CD     PORTCbits.RC4
+
+#define GPIO_USB_POWER     PORTAbits.RA9
+
+/*************************************************************************
+*   G L O B A L
+*************************************************************************/
+
+/************************************************************************
+*/
+/*! \brief Set io's to default state
+*
+*************************************************************************/
+void io_Init(void)
+{  
+   GPIO_SDCARD_CS = 1;
+   GPIO_XRESET = 0;
+   GPIO_USB_POWER = 0;
+   GPIO_LED_BACKLIGHT = 0;
+}
+
+/************************************************************************
+*/
+/*! \brief Set io's on or off
+*
+*   \param u08IO --> io to set 
+*   \param u08State --> IO_OFF, IO_ON
+*
+*************************************************************************/
+void io_Set(INT_U8 u08IO, INT_U8 u08State)
+{
+   /* Speed LEDs */
+   switch(u08IO)
+   {
+      case LED_TEST:
+      {
+         if(u08State == 0) GPIO_LED_TEST = 0;
+         else GPIO_LED_TEST = 1;
+      }
+      break;
+   
+      case LED_BACKLIGHT:
+      {
+         if(u08State == 0) GPIO_LED_BACKLIGHT = 0;
+         else GPIO_LED_BACKLIGHT = 1;
+      }
+      break;
+      
+      case EADOGM_CSB:
+      {
+         if(u08State == 0) GPIO_EADOGM_CSB = 0;
+         else GPIO_EADOGM_CSB = 1;
+      }
+      break;
+
+      case _XRESET:
+      {
+         if(u08State == 0) GPIO_XRESET = 0;
+         else GPIO_XRESET = 1;
+      }
+      break;
+
+      case _XTEST:
+      {
+         if(u08State == 0) GPIO_XTEST = 0;
+         else GPIO_XTEST = 1;
+      }
+      break;
+
+      case _XCS:
+      {
+         if(u08State == 0) GPIO_XCS = 0;
+         else GPIO_XCS = 1;
+      }
+      break;      
+      
+      case _XDCS:
+      {
+         if(u08State == 0) GPIO_XDCS = 0;
+         else GPIO_XDCS = 1;
+      }
+      break; 
+
+      case _SDCARD_CS:
+      {
+         if(u08State == 0) GPIO_SDCARD_CS = 0;
+         else GPIO_SDCARD_CS = 1;
+      }
+      break;      
+      
+      case USB_POWER:
+      {
+         if(u08State == 0) GPIO_USB_POWER = 0;
+         else GPIO_USB_POWER = 1;
+      }
+      break;
+      
+      default:
+      break;
+   }
+}
+
+
+/************************************************************************
+*/
+/*! \brief Get the io state
+*
+*   \param u08IO --> io state to get 
+*   \return INT_U8 --> 0 = io 0ff, 1 = io on
+*
+*************************************************************************/
+INT_U8 io_Get(INT_U8 u08IO)
+{
+   /* Speed LEDs */
+   switch(u08IO)
+   {
+      case TASTER1:
+      {
+         if(GPIO_TASTER1 == 0) return 0;
+         else return 1;
+      }
+      break;
+      
+      case TASTER2:
+      {
+         if(GPIO_TASTER2 == 0) return 0;
+         else return 1;
+      }
+      break;   
+
+      case TASTER3:
+      {
+         if(GPIO_TASTER3 == 0) return 0;
+         else return 1;
+      }
+      break; 
+      
+      case TASTER4:
+      {
+         if(GPIO_TASTER4 == 0) return 0;
+         else return 1;
+      }
+      break; 
+
+      case TASTER5:
+      {
+         if(GPIO_TASTER5 == 0) return 0;
+         else return 1;
+      }
+      break; 
+      
+      case DREQ:
+      {
+         if(GPIO_DREQ == 0) return 0;
+         else return 1;
+      }
+      break;
+
+      case SDCARD_CD:
+      {
+         if(GPIO_SDCARD_CD == 0) return 0;
+         else return 1;
+      }
+      break;
+
+      case SDCARD_WP:
+      {
+         if(GPIO_SDCARD_WP == 0) return 0;
+         else return 1;
+      }
+      break;
+      
+      default:
+      break;
+   }
+   
+   return 0;
+}
+
+

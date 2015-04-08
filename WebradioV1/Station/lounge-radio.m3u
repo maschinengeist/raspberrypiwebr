@@ -1,0 +1,15 @@
+#EXTM3U
+#EXTINF:-1,L O U N G E - R A D I O . C O M [Server in Netherlands]
+http://nl1.streamhosting.ch:80
+#EXTINF:-1,L O U N G E - R A D I O . C O M [Server in Germany]
+http://de1.streamhosting.ch:8050
+#EXTINF:-1,L O U N G E - R A D I O . C O M [Server in France]
+http://fr1.streamhosting.ch:8080
+#EXTINF:-1,L O U N G E - R A D I O . C O M [Server in Sweden]
+http://live.streamhosting.ch:8080
+#EXTINF:-1,L O U N G E - R A D I O . C O M [Server in Netherlands]
+http://nl1.streamhosting.ch:8080
+#EXTINF:-1,L O U N G E - R A D I O . C O M [Server in Netherlands]
+http://nl1.streamhosting.ch:8000
+#EXTINF:-1,L O U N G E - R A D I O . C O M [Server in Switzerland]
+http://ch2.streamhosting.ch:8040

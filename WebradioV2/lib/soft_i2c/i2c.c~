@@ -1,0 +1,151 @@
+
+#include "define.h"
+#include "soft_i2c.h"
+
+
+//********************** Lesen und Schreiben auf die I2C Schnittstelle **************************************
+//*																											*
+//*		Programm zum Lesen und Schreiben																	*
+//*																											*
+//*		adresse = adresse für interne daten																	*
+//*		i2c_adresse = adresse für adresse des bausteins 													*
+//*		Routinen Name = 																					*
+//*		Stacktiefe =																						*
+//*																											*
+//************************************************************************************************************
+
+#define				I2C_WAIT_TIME			160
+#define				I2C_CLOCK    			TRISCbits.TRISC13
+#define				I2C_DATA    			TRISCbits.TRISC14
+#define				I2C_DATA_IN   			PORTCbits.RC14
+
+void i2c_wait(unsigned long int loop)
+{	while(loop--);
+}
+
+void i2c_start(void)
+{
+   I2C_DATA = 0;				// start bit
+	i2c_wait(I2C_WAIT_TIME);// warten
+   I2C_CLOCK = 0;				// clock auf low danach änderung auf bus erlaubt
+   i2c_wait(I2C_WAIT_TIME);// warten
+}
+
+void i2c_stop(void)
+{
+   I2C_CLOCK = 0;				// clock auf low danach änderung auf bus erlaubt
+	i2c_wait(I2C_WAIT_TIME);	// warten
+	I2C_DATA = 0;				// daten auf low
+	i2c_wait(I2C_WAIT_TIME);	// warten
+	I2C_CLOCK = 1;				// clock auf high danach änderung auf bus nicht erlaubt
+	i2c_wait(I2C_WAIT_TIME);	// warten
+	I2C_DATA = 1;				// änderung während clock auf high --> i2c stopbedingung
+	i2c_wait(I2C_WAIT_TIME);	// warten
+}
+
+void i2c_restart(void)
+{
+   I2C_DATA = 0;				// start bit
+	i2c_wait(I2C_WAIT_TIME);	// warten
+   I2C_CLOCK = 0;				// clock auf low danach änderung auf bus erlaubt
+   i2c_wait(I2C_WAIT_TIME);// warten
+
+	I2C_CLOCK = 1;				// clock auf high danach änderung auf bus nicht erlaubt
+	i2c_wait(I2C_WAIT_TIME);	// warten
+	I2C_DATA = 1;				// änderung während clock auf high --> i2c stopbedingung
+	i2c_wait(I2C_WAIT_TIME);	// warten
+}
+
+void i2c_ack(void)
+{
+   unsigned char	time_out;
+
+	time_out = 100;
+	I2C_CLOCK = 0;				// clock auf low danach änderung auf bus erlaubt		
+	i2c_wait(I2C_WAIT_TIME);
+	I2C_DATA = 1;				// data auf eingabe
+	i2c_wait(I2C_WAIT_TIME);
+	//I2C_DATA_direktion = 1;		// auf eingabe umschalten
+	I2C_CLOCK = 1;				// clock auf high danach ack bit abfragen
+	i2c_wait(I2C_WAIT_TIME);
+
+	while(I2C_DATA);			// ack bit low ? wenn ja dann weiter;
+
+	//I2C_DATA_direktion = 0;		// auf ausgabe umschalten
+}
+
+void i2c_noack(void)
+{
+   I2C_CLOCK = 0;				// clock auf low danach änderung auf bus erlaubt
+	i2c_wait(I2C_WAIT_TIME);
+	I2C_DATA = 1;				// data auf eingabe
+	i2c_wait(I2C_WAIT_TIME);
+	I2C_CLOCK = 1;				// clock auf high danach ack bit abfragen
+	i2c_wait(I2C_WAIT_TIME);
+}
+
+unsigned char i2c_readack(void)
+{
+   I2C_CLOCK = 0;				// clock auf low danach änderung auf bus erlaubt
+	i2c_wait(I2C_WAIT_TIME);
+	I2C_CLOCK = 1;				// clock auf high danach ack bit abfragen
+	i2c_wait(I2C_WAIT_TIME);
+   return (unsigned char) I2C_DATA_IN;
+}
+
+unsigned char i2c_write(unsigned char value)
+{
+   unsigned char u08Loop, u08Ack;
+
+   for(u08Loop = 0 ; u08Loop < 8 ; u08Loop++)
+	{
+      I2C_CLOCK = 0;			// nur wenn i2c_clock 0 kann i2c_data geändert werden
+		i2c_wait(I2C_WAIT_TIME);
+
+		if(value & 0b10000000)	// i2c_data auf 0 oder 1 setzen
+		{	I2C_DATA = 1;
+		}
+		else
+		{	I2C_DATA = 0;
+		}
+		value <<= 1;			// linksschieben des control bytes
+
+		i2c_wait(I2C_WAIT_TIME);
+
+		I2C_CLOCK = 1;
+		i2c_wait(I2C_WAIT_TIME);
+	}
+
+   u08Ack = i2c_readack();
+
+#if 0
+   if(u08Ack) usart_puts("NOACK\r\n");
+   else usart_puts("ACK\r\n");
+#endif
+
+   return u08Ack;
+}
+
+unsigned char i2c_read(void)
+{
+   unsigned char u08Loop, u08Data;
+	u08Data = 0;
+
+   for(u08Loop = 0 ; u08Loop < 8 ; u08Loop++)
+	{
+      I2C_CLOCK = 0;				// nur wenn i2c_clock 0 kann i2c_data geändert werden
+		i2c_wait(I2C_WAIT_TIME);
+		//i2c_data_direktion = 1;		// daten auf eingabe
+		i2c_wait(I2C_WAIT_TIME);
+		I2C_CLOCK = 1;
+
+		u08Data <<= 1;					// linksschieben des control bytes
+		if(I2C_DATA)				// i2c_data auf 0 oder 1 setzen
+		{	u08Data |= 0b00000001;
+		}
+	}
+
+	i2c_ack();
+
+	return u08Data;
+}

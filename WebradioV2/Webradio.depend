@@ -1,0 +1,817 @@
+# depslib dependency file v1.0
+1364156179 source:/home/sbrandt/Arbeitsfläche/Webradio V2/gpio/gpio.c
+	"mytypes.h"
+	"debug.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<fcntl.h>
+	"gpio.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/incprj/mytypes.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/debug.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/gpio/gpio.h
+
+1425332208 source:/home/sbrandt/Arbeitsfläche/Webradio V2/lib/Dogm204/sim/Dogm204.c
+	"string.h"
+	"stdio.h"
+	"mytypes.h"
+	"Dogm204.h"
+
+1425332258 /home/sbrandt/Arbeitsfläche/Webradio V2/lib/Dogm204/Dogm204.h
+
+1425332897 source:/home/sbrandt/Arbeitsfläche/Webradio V2/main.cpp
+	<unistd.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"message.h"
+	"Init.h"
+	"Menue.h"
+	"Dogm204.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/message.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/Init.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/Menue.h
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/Directory.c
+	<dirent.h>
+	<errno.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"Directory.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/Directory.h
+
+1425332904 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/Init.c
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<string.h>
+	"mytypes.h"
+	"debug.h"
+	"Init.h"
+	"Dogm204.h"
+	"gpio.h"
+	"i2c.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/i2c/i2c.h
+
+1425332716 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/Menue.c
+	<linux/types.h>
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"message.h"
+	"Menue.h"
+	"Menue_OnOff.h"
+	"Menue_Play.h"
+	"Mplayer.h"
+	"Directory.h"
+	"Webradio.h"
+	"Dogm204.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/Menue_OnOff.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/Menue_Play.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/Mplayer.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/Webradio.h
+
+1425333184 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/Menue_OnOff.c
+	<linux/types.h>
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"message.h"
+	"Menue.h"
+	"Menue_OnOff.h"
+	"Mplayer.h"
+	"Directory.h"
+	"Webradio.h"
+	"Dogm204.h"
+
+1425332767 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/Menue_Play.c
+	<linux/types.h>
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"message.h"
+	"Menue.h"
+	"Menue_Play.h"
+	"Mplayer.h"
+	"Directory.h"
+	"Webradio.h"
+	"Dogm204.h"
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/Mplayer.c
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"Mplayer.h"
+	"debug.h"
+
+1394892008 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/Webradio.c
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<string.h>
+	"mytypes.h"
+	"debug.h"
+	"Webradio.h"
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/debug.c
+	"mytypes.h"
+	<stdio.h>
+	<stdarg.h>
+	"debug.h"
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/message.c
+	<unistd.h>
+	<termios.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<pthread.h>
+	"mytypes.h"
+	"message.h"
+	"gpio.h"
+
+1424895830 source:/home/sbrandt/Arbeitsfläche/Webradio V2/src/sim/Dogm204_UserInterface.c
+	"mytypes.h"
+	"Dogm204_UserInterface.h"
+
+1424895956 /home/sbrandt/Arbeitsfläche/Webradio V2/inc/Dogm204_UserInterface.h
+
+1426546183 source:/home/sbrandt/Arbeitsfläche/WebradioV2/gpio/gpio.c
+	"mytypes.h"
+	"debug.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<fcntl.h>
+	"gpio.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/incprj/mytypes.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/debug.h
+
+1426187588 /home/sbrandt/Arbeitsfläche/WebradioV2/gpio/gpio.h
+
+1425501580 source:/home/sbrandt/Arbeitsfläche/WebradioV2/lib/Dogm204/sim/Dogm204.c
+	"string.h"
+	"stdio.h"
+	"mytypes.h"
+	"Dogm204.h"
+
+1425416379 /home/sbrandt/Arbeitsfläche/WebradioV2/lib/Dogm204/Dogm204.h
+
+1426452888 source:/home/sbrandt/Arbeitsfläche/WebradioV2/main.cpp
+	<unistd.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"Init.h"
+	"Menue.h"
+	"mode.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/message.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/Init.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/Menue.h
+
+1426630590 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/mode.h
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/Directory.c
+	<dirent.h>
+	<errno.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"Directory.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/Directory.h
+
+1426707010 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/Init.c
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<string.h>
+	"mytypes.h"
+	"hwtime.h"
+	"debug.h"
+	"Init.h"
+	"Dogm204.h"
+	"io.h"
+	"i2c.h"
+
+1425413138 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/hwtime.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/i2c/i2c.h
+
+1425332716 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/Menue.c
+	<linux/types.h>
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"message.h"
+	"Menue.h"
+	"Menue_OnOff.h"
+	"Menue_Play.h"
+	"Mplayer.h"
+	"Directory.h"
+	"Webradio.h"
+	"Dogm204.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/Menue_OnOff.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/Menue_Play.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/Mplayer.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/Webradio.h
+
+1425415638 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/Menue_OnOff.c
+	<linux/types.h>
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"message.h"
+	"Menue.h"
+	"Menue_OnOff.h"
+	"Mplayer.h"
+	"Directory.h"
+	"Webradio.h"
+	"Dogm204.h"
+
+1425332767 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/Menue_Play.c
+	<linux/types.h>
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"message.h"
+	"Menue.h"
+	"Menue_Play.h"
+	"Mplayer.h"
+	"Directory.h"
+	"Webradio.h"
+	"Dogm204.h"
+
+1425499397 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/Mplayer.c
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"Mplayer.h"
+	"debug.h"
+
+1394892008 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/Webradio.c
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<string.h>
+	"mytypes.h"
+	"debug.h"
+	"Webradio.h"
+
+1426778612 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/command.c
+	<unistd.h>
+	<termios.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<pthread.h>
+	"mytypes.h"
+	"debug.h"
+	"command.h"
+	"hwtime.h"
+	"io.h"
+
+1426627978 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/command.h
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/debug.c
+	"mytypes.h"
+	<stdio.h>
+	<stdarg.h>
+	"debug.h"
+
+1425756362 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/hwtime.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<pthread.h>
+	"mytypes.h"
+	"hwtime.h"
+
+1426778206 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/io.c
+	"mytypes.h"
+	"gpio.h"
+	"io.h"
+
+1426628211 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/io.h
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/message.c
+	<unistd.h>
+	<termios.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<pthread.h>
+	"mytypes.h"
+	"message.h"
+	"gpio.h"
+
+1426630556 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/mode.c
+	<string.h>
+	<stdio.h>
+	"mytypes.h"
+	"mode.h"
+	"mode_Power.h"
+	"mode_Play.h"
+	"mode_Settings.h"
+	"station.h"
+	"hwtime.h"
+	"command.h"
+	"mode.h"
+	"io.h"
+
+1426544653 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/mode_OnOff.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	"mytypes.h"
+	"debug.h"
+	"Mplayer.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"hwtime.h"
+	"command.h"
+	"mode.h"
+	"io.h"
+
+1426802419 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/property.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"property.h"
+
+1426450963 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/property.h
+
+1426452511 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/station.h
+
+1425667644 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/sim/Dogm204_UserInterface.c
+	<stdio.h>
+	<string.h>
+	"mytypes.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+
+1425418840 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/Dogm204_UserInterface.h
+
+1426452614 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/station.c
+	<dirent.h>
+	<errno.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"station.h"
+
+1425756423 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/mode_OnOff.h
+
+1426022910 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/settings.h
+
+1425991575 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/network.c
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"network.h"
+
+1425991427 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/network.h
+
+1426452566 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/settings.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	"mytypes.h"
+	"debug.h"
+	"station.h"
+	"settings.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"mode.h"
+	"hwtime.h"
+	"command.h"
+	"settings.h"
+	"station.h"
+	"Mplayer.h"
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/WebradioV2/lib/i2c/i2c.c
+	"mytypes.h"
+	"debug.h"
+	<unistd.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<linux/i2c-dev.h>
+	<sys/ioctl.h>
+	<sys/types.h>
+	<fcntl.h>
+	"i2c.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/WebradioV2/lib/i2c/i2c.h
+
+1426630486 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/mode_Power.h
+
+1426545931 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/mode_Play.h
+
+1426778423 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/mode_Play.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	"mytypes.h"
+	"debug.h"
+	"Mplayer.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"hwtime.h"
+	"command.h"
+	"mode.h"
+	"mode_Play.h"
+	"io.h"
+
+1426779608 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/mode_Power.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	"mytypes.h"
+	"debug.h"
+	"Mplayer.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"hwtime.h"
+	"command.h"
+	"mode.h"
+	"mode_Power.h"
+	"io.h"
+
+1426595137 /home/sbrandt/Arbeitsfläche/WebradioV2/inc/mode_Settings.h
+
+1426778959 source:/home/sbrandt/Arbeitsfläche/WebradioV2/src/mode_Settings.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	"mytypes.h"
+	"mode.h"
+	"mode_Power.h"
+	"mode_Play.h"
+	"mode_Settings.h"
+	"debug.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"mode.h"
+	"hwtime.h"
+	"command.h"
+	"station.h"
+	"Mplayer.h"
+
+1426546183 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/gpio/gpio.c
+	"mytypes.h"
+	"debug.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<fcntl.h>
+	"gpio.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/incprj/mytypes.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/debug.h
+
+1426187588 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/gpio/gpio.h
+
+1425501580 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/lib/Dogm204/sim/Dogm204.c
+	"string.h"
+	"stdio.h"
+	"mytypes.h"
+	"Dogm204.h"
+
+1425416379 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/lib/Dogm204/Dogm204.h
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/lib/i2c/i2c.c
+	"mytypes.h"
+	"debug.h"
+	<unistd.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<linux/i2c-dev.h>
+	<sys/ioctl.h>
+	<sys/types.h>
+	<fcntl.h>
+	"i2c.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/lib/i2c/i2c.h
+
+1427787860 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/main.cpp
+	<unistd.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"Init.h"
+	"Menue.h"
+	"mode.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/Init.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/Menue.h
+
+1428481350 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode.h
+
+1425418840 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/Dogm204_UserInterface.h
+
+1426707010 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/Init.c
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<string.h>
+	"mytypes.h"
+	"hwtime.h"
+	"debug.h"
+	"Init.h"
+	"Dogm204.h"
+	"io.h"
+	"i2c.h"
+
+1425413138 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/hwtime.h
+
+1426628211 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/io.h
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/i2c/i2c.h
+
+1427141648 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/Mplayer.c
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"Mplayer.h"
+	"debug.h"
+
+1364156179 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/Mplayer.h
+
+1427787731 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/command.c
+	<unistd.h>
+	<termios.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<pthread.h>
+	"mytypes.h"
+	"debug.h"
+	"command.h"
+	"hwtime.h"
+	"io.h"
+
+1426627978 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/command.h
+
+1364156179 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/debug.c
+	"mytypes.h"
+	<stdio.h>
+	<stdarg.h>
+	"debug.h"
+
+1425756362 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/hwtime.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<pthread.h>
+	"mytypes.h"
+	"hwtime.h"
+
+1426778206 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/io.c
+	"mytypes.h"
+	"gpio.h"
+	"io.h"
+
+1428481350 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode.c
+	<string.h>
+	<stdio.h>
+	"mytypes.h"
+	"mode.h"
+	"mode_Power.h"
+	"mode_Play.h"
+	"mode_Settings.h"
+	"mode_Newsstation.h"
+	"station.h"
+	"hwtime.h"
+	"command.h"
+	"mode.h"
+	"io.h"
+
+1426630486 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Power.h
+
+1426545931 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Play.h
+
+1428437543 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Settings.h
+
+1428481408 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Newsstation.h
+
+1426452511 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/station.h
+
+1428524585 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Newsstation.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	"mytypes.h"
+	"mode.h"
+	"mode_Newsstation.h"
+	"mode_Power.h"
+	"mode_Play.h"
+	"mode_Settings.h"
+	"debug.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"mode.h"
+	"hwtime.h"
+	"command.h"
+	"station.h"
+	"Mplayer.h"
+
+1428480226 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/property.h
+
+1428524380 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Play.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	<time.h>
+	"mytypes.h"
+	"debug.h"
+	"Mplayer.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"hwtime.h"
+	"command.h"
+	"mode.h"
+	"mode_Play.h"
+	"io.h"
+
+1428524640 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Power.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	"mytypes.h"
+	"debug.h"
+	"Mplayer.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"hwtime.h"
+	"command.h"
+	"mode.h"
+	"mode_Power.h"
+	"io.h"
+
+1428440288 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Settings.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	"mytypes.h"
+	"mode.h"
+	"mode_Power.h"
+	"mode_Play.h"
+	"mode_Settings.h"
+	"debug.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"mode.h"
+	"hwtime.h"
+	"command.h"
+	"station.h"
+	"Mplayer.h"
+
+1425991575 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/network.c
+	<fcntl.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"network.h"
+
+1425991427 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/network.h
+
+1428522406 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/property.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"property.h"
+
+1425667644 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/sim/Dogm204_UserInterface.c
+	<stdio.h>
+	<string.h>
+	"mytypes.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+
+1426452614 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/station.c
+	<dirent.h>
+	<errno.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<unistd.h>
+	"mytypes.h"
+	"station.h"
+
