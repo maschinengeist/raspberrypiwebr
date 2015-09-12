@@ -28,7 +28,7 @@
 *   S T A T I C
 *************************************************************************/
 
-static INT_U8 u08NewsStart = 0, u08NewsStopTime = 0;
+static INT_U8 u08NewsStopTime = 0;
 
 /*************************************************************************
 *   P L A Y   M O D U S
@@ -186,9 +186,6 @@ void mode_Play(void)
 
 			if(hwtime_Check(TIME_500MS))
 			{
-				/* the offset for your country */
-				#define COUNTRY_TIME_OFFSET 1
-
 				time_t rawtime;
 				struct tm * timeinfo;
 				Dogm204_DisplayMove(2, 0, 20);
@@ -224,9 +221,9 @@ void mode_Play(void)
 
 					if((u08Minuten == u08StartTime[0]) || (u08Minuten == u08StartTime[1]) || (u08Minuten == u08StartTime[2]) || (u08Minuten == u08StartTime[3]))
 					{
-						if(u08NewsStart == 0)
+						if(property_Read(PROPERTY_NEWS_START) == 0)
 						{
-							u08NewsStart = 1;
+							property_Write(PROPERTY_NEWS_START, 1);
 
 							Dogm204_Clear();
 							Dogm204_PrintStringXY("    !!! NEWS !!!    ", 1, 0);
@@ -248,9 +245,9 @@ void mode_Play(void)
 
 					if(u08Minuten == u08NewsStopTime)
 					{
-						if(u08NewsStart == 1)
+						if(property_Read(PROPERTY_NEWS_START) == 1)
 						{
-							u08NewsStart = 0;
+							property_Write(PROPERTY_NEWS_START, 0);
 
 							Dogm204_Clear();
 							Dogm204_PrintStringXY("  !!! NEWS END !!!  ", 1, 0);
@@ -260,6 +257,21 @@ void mode_Play(void)
 							property_WriteString(PROPERTY_STATION, property_ReadString(PROPERTY_TEMPORARYNAME));
 							mode_Change(MODE_CHANGE_STATION);
 						}
+					}
+				}
+				else
+				{
+					if(property_Read(PROPERTY_NEWS_START) == 1)
+					{
+						property_Write(PROPERTY_NEWS_START, 0);
+
+						Dogm204_Clear();
+						Dogm204_PrintStringXY("  !!! NEWS END !!!  ", 1, 0);
+						sleep(2);
+
+						/* set new staion and change */
+						property_WriteString(PROPERTY_STATION, property_ReadString(PROPERTY_TEMPORARYNAME));
+						mode_Change(MODE_CHANGE_STATION);
 					}
 				}
 			}

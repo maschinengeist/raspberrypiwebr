@@ -28,7 +28,7 @@
 *   D E F I N E
 *************************************************************************/
 
-#define MAX_SETTINGS 5
+#define MAX_SETTINGS 6
 
 #define STRINGLENGHT_STATION_NAME 34
 #define STRINGLENGHT_STATION_ADDRESS 127
@@ -41,11 +41,12 @@ extern void settings_NameEdit(void);
 *   S T A T I C
 *************************************************************************/
 
-static char cSelection[MAX_SETTINGS][20] =  {{"add new stations"},
-															{"clear stations"},
-															{"set start volume"},
-															{"set news station"},
-															{"network settings"}};
+static char cSelection[MAX_SETTINGS][20] =  {{"alarm clock"},
+															{"news station"},
+															{"start volume"},
+															{"network settings"},
+															{"add new stations"},
+															{"clear stations"}};
 
 static INT_U8 u08NextMode = MODE_PLAY;
 
@@ -90,11 +91,12 @@ void mode_Selection(void)
          {
          	switch(u08Selection + u08DisplayPosition)
          	{
-         		case 0: mode_Change(MODE_SETTINGS_STATION_NAME); break;
-         		case 1: mode_Change(MODE_SETTINGS_STATION_CLEAR); break;
-         		case 2: mode_Change(MODE_SETTINGS_STARTVOLUME); break;
-         		case 3: mode_Change(MODE_NEWS_SELECTION); break;
-         		case 4: mode_Change(MODE_SETTINGS_NETWORK_RSSI); break;
+         		case 0: mode_Change(MODE_ALARM_SELECTION); 			break;
+         		case 1: mode_Change(MODE_NEWS_SELECTION); 			break;
+         		case 2: mode_Change(MODE_SETTINGS_STARTVOLUME); 	break;
+         		case 3: mode_Change(MODE_SETTINGS_NETWORK_RSSI); 	break;
+         		case 4: mode_Change(MODE_SETTINGS_STATION_NAME); 	break;
+         		case 5: mode_Change(MODE_SETTINGS_STATION_CLEAR); 	break;
          		default: break;
          	}
          }
@@ -178,7 +180,7 @@ void mode_Startvolume(void)
          	mode_TimeoutTrigger();
          	Dogm204_PrintStringXY("        start volume", 2 ,0);
 
-         	Dogm204_DisplayProgressBar((float) (property_Read(PROPERTY_VOLUME) - 50) * 2.0 , 10, 3, 10);
+         	Dogm204_DisplayProgressBar((float) (property_Read(PROPERTY_STARTVOLUME) - 50) * 2.0 , 10, 3, 10);
          	Dogm204_PrintChar(0x15, 3 ,8);
          }
       }

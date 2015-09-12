@@ -37,8 +37,8 @@
 	<File name="src/Init.c" open="0" top="0" tabpos="8">
 		<Cursor position="173" topLine="23" />
 	</File>
-	<File name="src/Mplayer.c" open="0" top="0" tabpos="8">
-		<Cursor position="4792" topLine="34" />
+	<File name="src/Mplayer.c" open="1" top="0" tabpos="5">
+		<Cursor position="6128" topLine="269" />
 	</File>
 	<File name="src/command.c" open="0" top="0" tabpos="5">
 		<Cursor position="905" topLine="15" />
@@ -50,25 +50,28 @@
 		<Cursor position="323" topLine="0" />
 	</File>
 	<File name="src/mode.c" open="0" top="0" tabpos="5">
-		<Cursor position="5835" topLine="233" />
+		<Cursor position="383" topLine="0" />
 	</File>
-	<File name="src/mode_Newsstation.c" open="0" top="0" tabpos="1">
-		<Cursor position="3454" topLine="133" />
+	<File name="src/mode_Alarmclock.c" open="1" top="0" tabpos="2">
+		<Cursor position="2208" topLine="170" />
 	</File>
-	<File name="src/mode_Play.c" open="1" top="1" tabpos="0">
-		<Cursor position="11050" topLine="360" />
+	<File name="src/mode_Newsstation.c" open="1" top="0" tabpos="7">
+		<Cursor position="1163" topLine="27" />
 	</File>
-	<File name="src/mode_Power.c" open="0" top="0" tabpos="2">
-		<Cursor position="1083" topLine="34" />
+	<File name="src/mode_Play.c" open="1" top="0" tabpos="4">
+		<Cursor position="7219" topLine="36" />
 	</File>
-	<File name="src/mode_Settings.c" open="0" top="0" tabpos="2">
-		<Cursor position="2088" topLine="109" />
+	<File name="src/mode_Power.c" open="1" top="0" tabpos="1">
+		<Cursor position="936" topLine="21" />
+	</File>
+	<File name="src/mode_Settings.c" open="1" top="1" tabpos="8">
+		<Cursor position="5588" topLine="162" />
 	</File>
 	<File name="src/network.c" open="0" top="0" tabpos="11">
 		<Cursor position="6051" topLine="195" />
 	</File>
-	<File name="src/property.c" open="0" top="0" tabpos="2">
-		<Cursor position="11464" topLine="390" />
+	<File name="src/property.c" open="1" top="0" tabpos="3">
+		<Cursor position="890" topLine="15" />
 	</File>
 	<File name="src/sim/Dogm204_UserInterface.c" open="0" top="0" tabpos="4">
 		<Cursor position="238" topLine="0" />

@@ -604,7 +604,7 @@
 
 1364156179 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/Menue.h
 
-1428481350 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode.h
+1428603106 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode.h
 
 1425418840 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/Dogm204_UserInterface.h
 
@@ -674,7 +674,7 @@
 	"gpio.h"
 	"io.h"
 
-1428481350 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode.c
+1428603188 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode.c
 	<string.h>
 	<stdio.h>
 	"mytypes.h"
@@ -683,6 +683,7 @@
 	"mode_Play.h"
 	"mode_Settings.h"
 	"mode_Newsstation.h"
+	"mode_Alarmclock.h"
 	"station.h"
 	"hwtime.h"
 	"command.h"
@@ -691,7 +692,7 @@
 
 1426630486 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Power.h
 
-1426545931 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Play.h
+1428605956 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Play.h
 
 1428437543 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Settings.h
 
@@ -699,7 +700,7 @@
 
 1426452511 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/station.h
 
-1428524585 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Newsstation.c
+1428605239 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Newsstation.c
 	<string.h>
 	<stdio.h>
 	<unistd.h>
@@ -720,9 +721,9 @@
 	"station.h"
 	"Mplayer.h"
 
-1428480226 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/property.h
+1428603027 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/property.h
 
-1428524380 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Play.c
+1428605956 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Play.c
 	<string.h>
 	<stdio.h>
 	<unistd.h>
@@ -741,11 +742,12 @@
 	"mode_Play.h"
 	"io.h"
 
-1428524640 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Power.c
+1428608179 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Power.c
 	<string.h>
 	<stdio.h>
 	<unistd.h>
 	<stdlib.h>
+	<time.h>
 	"mytypes.h"
 	"debug.h"
 	"Mplayer.h"
@@ -757,9 +759,10 @@
 	"command.h"
 	"mode.h"
 	"mode_Power.h"
+	"mode_Play.h"
 	"io.h"
 
-1428440288 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Settings.c
+1428603518 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Settings.c
 	<string.h>
 	<stdio.h>
 	<unistd.h>
@@ -790,7 +793,7 @@
 
 1425991427 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/network.h
 
-1428522406 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/property.c
+1428607970 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/property.c
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
@@ -814,4 +817,28 @@
 	<unistd.h>
 	"mytypes.h"
 	"station.h"
+
+1428602665 /home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/inc/mode_Alarmclock.h
+
+1428605209 source:/home/sbrandt/Arbeitsfläche/Webradio/WebradioV2/src/mode_Alarmclock.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	"mytypes.h"
+	"mode.h"
+	"mode_Alarmclock.h"
+	"mode_Newsstation.h"
+	"mode_Power.h"
+	"mode_Play.h"
+	"mode_Settings.h"
+	"debug.h"
+	"station.h"
+	"property.h"
+	"Dogm204.h"
+	"Dogm204_UserInterface.h"
+	"mode.h"
+	"hwtime.h"
+	"command.h"
+	"station.h"
+	"Mplayer.h"
 

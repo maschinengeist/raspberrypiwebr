@@ -24,7 +24,8 @@
 *************************************************************************/
 
 static INT_U8 u08Volume = 60, u08StartVolume = 60;
-static INT_U8 u08NewsState = 0, u08NewsStarttime = 0, u08NewsDurationtime = 0, u08NewsInterval = 0;
+static INT_U8 u08NewsState = 0, u08NewsStarttime = 0, u08NewsDurationtime = 0, u08NewsInterval = 0, u08NewsStart = 0;
+static INT_U8 u08AlarmState = 0, u08AlarmMinutes = 0, u08AlarmHour = 0;
 static INT_U8 u08Station = 1;
 static char cNameMemory[PROPERTY_MAX_STRING_ENTRYS][PROPERTY_STATIONS_STRINGLENGTH];
 static char cEmpty[2] = {""};
@@ -54,6 +55,9 @@ INT_U8 property_Read(INT_U8 u08Type)
       case PROPERTY_NEWS_STATE:
       return u08NewsState;
 
+      case PROPERTY_NEWS_START:
+      return u08NewsStart;
+
       case PROPERTY_NEWS_STARTTIME:
       return u08NewsStarttime;
 
@@ -62,6 +66,15 @@ INT_U8 property_Read(INT_U8 u08Type)
 
       case PROPERTY_NEWS_INTERVAL:
       return u08NewsInterval;
+
+      case PROPERTY_ALARM_STATE:
+      return u08AlarmState;
+
+      case PROPERTY_ALARM_MINUTES:
+      return u08AlarmMinutes;
+
+      case PROPERTY_ALARM_HOUR:
+      return u08AlarmHour;
 
       default:
       return 0;
@@ -96,6 +109,10 @@ void property_Write(INT_U8 u08Type, INT_U8 u08Value)
          u08NewsState = u08Value;
       break;
 
+      case PROPERTY_NEWS_START:
+      	u08NewsStart = u08Value;
+      break;
+
       case PROPERTY_NEWS_STARTTIME:
          u08NewsStarttime = u08Value;
       break;
@@ -106,6 +123,18 @@ void property_Write(INT_U8 u08Type, INT_U8 u08Value)
 
       case PROPERTY_NEWS_INTERVAL:
          u08NewsInterval = u08Value;
+      break;
+
+      case PROPERTY_ALARM_STATE:
+       	u08AlarmState = u08Value;
+      break;
+
+      case PROPERTY_ALARM_MINUTES:
+       	u08AlarmMinutes = u08Value;
+      break;
+
+      case PROPERTY_ALARM_HOUR:
+      	u08AlarmHour = u08Value;
       break;
 
       default:
@@ -222,6 +251,14 @@ INT_U8 property_Increment(INT_U8 u08Type, INT_U8 u08MaxValue)
          pValue = &u08NewsInterval;
       break;
 
+      case PROPERTY_ALARM_MINUTES:
+         pValue = &u08AlarmMinutes;
+      break;
+
+      case PROPERTY_ALARM_HOUR:
+         pValue = &u08AlarmHour;
+      break;
+
       default:
       return 0;
    }
@@ -272,6 +309,14 @@ INT_U8 property_Decrement(INT_U8 u08Type, INT_U8 u08MinValue)
 
       case PROPERTY_NEWS_INTERVAL:
          pValue = &u08NewsInterval;
+      break;
+
+      case PROPERTY_ALARM_MINUTES:
+         pValue = &u08AlarmMinutes;
+      break;
+
+      case PROPERTY_ALARM_HOUR:
+         pValue = &u08AlarmHour;
       break;
 
       default:
@@ -349,6 +394,25 @@ int property_Load(char* cPath)
 			if(cString == NULL) return -1;
 			property_Write(PROPERTY_NEWS_INTERVAL, (INT_U8)atol(cFullPath));
 
+			/* alarmclock propertys */
+			cString = fgets(cFullPath, strlen("alarmclock state= "), fpPropertys);
+			if(cString == NULL) return -1;
+			cString = fgets(cFullPath, PROPERTY_STATIONS_STRINGLENGTH, fpPropertys);
+			if(cString == NULL) return -1;
+			property_Write(PROPERTY_ALARM_STATE, (INT_U8)atol(cFullPath));
+
+			cString = fgets(cFullPath, strlen("alarmclock hour= "), fpPropertys);
+			if(cString == NULL) return -1;
+			cString = fgets(cFullPath, PROPERTY_STATIONS_STRINGLENGTH, fpPropertys);
+			if(cString == NULL) return -1;
+			property_Write(PROPERTY_ALARM_HOUR, (INT_U8)atol(cFullPath));
+
+			cString = fgets(cFullPath, strlen("alarmclock minutes= "), fpPropertys);
+			if(cString == NULL) return -1;
+			cString = fgets(cFullPath, PROPERTY_STATIONS_STRINGLENGTH, fpPropertys);
+			if(cString == NULL) return -1;
+			property_Write(PROPERTY_ALARM_MINUTES, (INT_U8)atol(cFullPath));
+
 			/* string propertys */
 			cString = fgets(cFullPath, strlen("station= "), fpPropertys);
 			if(cString == NULL) return -1;
@@ -403,6 +467,9 @@ int property_Load(char* cPath)
 			property_Write(PROPERTY_NEWS_STARTTIME, 0);
 			property_Write(PROPERTY_NEWS_DURATIONTIME, 5);
 			property_Write(PROPERTY_NEWS_INTERVAL, 0);
+			property_Write(PROPERTY_ALARM_STATE, 0);
+			property_Write(PROPERTY_ALARM_HOUR, 0);
+			property_Write(PROPERTY_ALARM_MINUTES, 0);
 			property_WriteString(PROPERTY_STATION, "Live Irland.m3u");
 			property_WriteString(PROPERTY_STATION_MEMO1, "");
 			property_WriteString(PROPERTY_STATION_MEMO2, "");
@@ -452,6 +519,9 @@ int property_Save(char* cPath)
 			fprintf(fpPropertys, "news starttime=%d\n", (int)property_Read(PROPERTY_NEWS_STARTTIME));
 			fprintf(fpPropertys, "news duration=%d\n", (int)property_Read(PROPERTY_NEWS_DURATIONTIME));
 			fprintf(fpPropertys, "news interval=%d\n", (int)property_Read(PROPERTY_NEWS_INTERVAL));
+			fprintf(fpPropertys, "alarmclock state=%d\n", (int)property_Read(PROPERTY_ALARM_STATE));
+			fprintf(fpPropertys, "alarmclock hour=%d\n", (int)property_Read(PROPERTY_ALARM_HOUR));
+			fprintf(fpPropertys, "alarmclock minutes=%d\n", (int)property_Read(PROPERTY_ALARM_MINUTES));
 			fprintf(fpPropertys, "station=%s\n", property_ReadString(PROPERTY_STATION));
 			fprintf(fpPropertys, "station memo1=%s\n", property_ReadString(PROPERTY_STATION_MEMO1));
 			fprintf(fpPropertys, "station memo2=%s\n", property_ReadString(PROPERTY_STATION_MEMO2));

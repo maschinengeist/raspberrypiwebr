@@ -128,6 +128,9 @@
 		<Unit filename="src/mode.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/mode_Alarmclock.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/mode_Newsstation.c">
 			<Option compilerVar="CC" />
 		</Unit>

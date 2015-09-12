@@ -124,6 +124,8 @@ void mode_NewsSelection(void)
 				else
 				{
 					sprintf(&cSelection[0][5], "%s","[off]");
+					/* set state of news inactive */
+					property_Write(PROPERTY_NEWS_START, 0);
 				}
 
             for(u08Loop = 0 ; u08Loop < (DISPLAY_HIGH); u08Loop++)
@@ -139,8 +141,7 @@ void mode_NewsSelection(void)
          /* with switch4 go back to play mode */
 			if(command_Read() == CMD_SWITCH4)
 			{
-				mode_Change(MODE_PLAY);
-				Dogm204_DisplayWriteText(2, "                    ");
+				mode_Change(MODE_SETTINGS);
 
 				/* save the Webradio settings */
 				if(property_Save(property_ReadString(PROPERTY_WORKING_PATH)) < 0) printf("Settings write error\r\n");
@@ -269,13 +270,14 @@ void mode_NewsStarttime(void)
 			/* change startvolume */
          if((command_Read() == CMD_UP) || (command_Read() == CMD_RIGHT))
          {
-         	property_Increment(PROPERTY_NEWS_STARTTIME, 59);
+         	if(60 == property_Increment(PROPERTY_NEWS_STARTTIME, 60)) property_Write(PROPERTY_NEWS_STARTTIME, 0);
          	property_Write(PROPERTY_VOLUME, property_Read(PROPERTY_NEWS_STARTTIME));
          }
 
          if((command_Read() == CMD_DOWN) || (command_Read() == CMD_LEFT))
          {
-         	property_Decrement(PROPERTY_NEWS_STARTTIME, 0);
+				if(0 == property_Read(PROPERTY_NEWS_STARTTIME)) property_Write(PROPERTY_NEWS_STARTTIME, 59);
+				else property_Decrement(PROPERTY_NEWS_STARTTIME, 0);
          	property_Write(PROPERTY_VOLUME, property_Read(PROPERTY_NEWS_STARTTIME));
          }
 

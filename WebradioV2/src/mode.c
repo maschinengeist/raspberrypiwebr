@@ -12,6 +12,7 @@
 #include "mode_Play.h"
 #include "mode_Settings.h"
 #include "mode_Newsstation.h"
+#include "mode_Alarmclock.h"
 
 #include "station.h"
 #include "hwtime.h"
@@ -238,6 +239,14 @@ void mode(void)
          mode_NewsInterval();
 		break;
 
+		case MODE_ALARM_SELECTION:
+         mode_AlarmSelection();
+		break;
+
+		case MODE_ALARM_TIME:
+         mode_AlarmTime();
+		break;
+
       case MODE_POWEROFF:
          mode_Poweroff();
 		break;
@@ -249,6 +258,7 @@ void mode(void)
       case MODE_SLEEP:
          mode_Sleep();
 		break;
+
 
 		default:
 		break;
